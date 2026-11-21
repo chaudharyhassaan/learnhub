@@ -1,0 +1,9 @@
+# Dependencies
+node_modules
+
+# Local environment file with real secrets
+.env
+
+# Uploaded files (keep the folder itself)
+uploads/*
+!uploads/.gitkeep
