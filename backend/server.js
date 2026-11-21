@@ -11,6 +11,8 @@ const connectDB = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 const { apiLimiter } = require('./middleware/rateLimiters');
 const authRoutes = require('./routes/authRoutes');
+const courseRoutes = require('./routes/courseRoutes');
+const { CATEGORIES } = require('./utils/constants');
 
 // Fail fast and name the missing keys, so a bad .env file is easy to fix.
 const requiredEnv = ['MONGO_URI', 'JWT_SECRET', 'CLIENT_URL'];
@@ -55,12 +57,20 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
+// Public list used to build the category filter on the course page.
+app.get('/api/categories', (req, res) => {
+  res.status(200).json(CATEGORIES);
+});
+
 // ----------------------------- ROUTES GO HERE -----------------------------
 // Authentication: POST /api/register, POST /api/login, GET /api/me
 app.use('/api', authRoutes);
 
+// Courses: public list and details, protected create, edit and delete.
+app.use('/api/courses', courseRoutes);
+
 // Later tasks mount their own route files here, for example:
-// app.use('/api/courses', require('./routes/courseRoutes'));
+// app.use('/api/courses/:courseId/lessons', require('./routes/lessonRoutes'));
 // --------------------------------------------------------------------------
 
 // Unknown URLs and thrown errors are handled last, in that order.
