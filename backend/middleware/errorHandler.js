@@ -36,7 +36,12 @@ function errorHandler(err, req, res, next) {
 
   // Multer errors (file too large, wrong field name and so on).
   if (err.name === 'MulterError') {
-    return res.status(400).json({ message: err.message });
+    const message =
+      err.code === 'LIMIT_FILE_SIZE' || err.code === 'LIMIT_FILE_COUNT'
+        ? 'Only PDF, MP4, PNG and JPG files up to 50 MB are allowed.'
+        : err.message;
+
+    return res.status(400).json({ message });
   }
 
   // Unknown server errors are logged for the developer, but the response stays vague

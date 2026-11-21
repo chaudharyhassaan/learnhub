@@ -1,13 +1,24 @@
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
+const removeFile = require('../utils/files');
 
 // Why: controllers should only run on clean input. This turns express-validator
 // results into the shared { message, errors } shape the frontend expects.
-function validate(req, res, next) {
+async function validate(req, res, next) {
   const result = validationResult(req);
 
   if (result.isEmpty()) {
     return next();
+  }
+
+  // Multer saves the file before validation runs, so a rejected form must not
+  // leave an orphan behind in the uploads folder.
+  if (req.file) {
+    try {
+      await removeFile(req.file.filename);
+    } catch (error) {
+      console.error(`Could not remove rejected upload: ${error.message}`);
+    }
   }
 
   const errors = {};
