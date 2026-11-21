@@ -43,7 +43,6 @@ learnhub/
 - Passwords: bcrypt hash, never returned in any response, never logged. Login errors are
  generic ("Invalid email or password").
 - Helmet security headers, CORS locked to CLIENT_URL, rate limits (strict on login and
-LearnHub: OpenCode prompt pack Page 4
  register).
 - Uploads: allow only PDF, MP4, PNG, JPG, max 50 MB, random file names, stored outside any
  public static folder, served only through an authorised route.
