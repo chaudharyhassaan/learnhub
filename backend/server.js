@@ -9,6 +9,8 @@ const morgan = require('morgan');
 
 const connectDB = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
+const { apiLimiter } = require('./middleware/rateLimiters');
+const authRoutes = require('./routes/authRoutes');
 
 // Fail fast and name the missing keys, so a bad .env file is easy to fix.
 const requiredEnv = ['MONGO_URI', 'JWT_SECRET', 'CLIENT_URL'];
@@ -45,14 +47,19 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
 
+// Every API request is rate limited before it reaches a route.
+app.use('/api', apiLimiter);
+
 // Public check used by hosting platforms and by the frontend to confirm the API is up.
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
 // ----------------------------- ROUTES GO HERE -----------------------------
-// Later tasks mount their route files here, for example:
-// app.use('/api/auth', require('./routes/authRoutes'));
+// Authentication: POST /api/register, POST /api/login, GET /api/me
+app.use('/api', authRoutes);
+
+// Later tasks mount their own route files here, for example:
 // app.use('/api/courses', require('./routes/courseRoutes'));
 // --------------------------------------------------------------------------
 
