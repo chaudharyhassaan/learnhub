@@ -13,6 +13,7 @@ const { apiLimiter } = require('./middleware/rateLimiters');
 const authRoutes = require('./routes/authRoutes');
 const courseRoutes = require('./routes/courseRoutes');
 const lessonRoutes = require('./routes/lessonRoutes');
+const enrollmentRoutes = require('./routes/enrollmentRoutes');
 const { CATEGORIES } = require('./utils/constants');
 
 // Fail fast and name the missing keys, so a bad .env file is easy to fix.
@@ -74,8 +75,11 @@ app.use('/api/courses', courseRoutes);
 // /api/lessons/:id, /api/files/:token
 app.use('/api', lessonRoutes);
 
+// Student enrollments and lesson progress: /api/enroll, /api/my-courses
+app.use('/api', enrollmentRoutes);
+
 // Later tasks mount their own route files here, for example:
-// app.use('/api/enrollments', require('./routes/enrollmentRoutes'));
+// app.use('/api/stats', require('./routes/statsRoutes'));
 // --------------------------------------------------------------------------
 
 // Unknown URLs and thrown errors are handled last, in that order.
