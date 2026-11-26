@@ -14,6 +14,8 @@ const authRoutes = require('./routes/authRoutes');
 const courseRoutes = require('./routes/courseRoutes');
 const lessonRoutes = require('./routes/lessonRoutes');
 const enrollmentRoutes = require('./routes/enrollmentRoutes');
+const statsRoutes = require('./routes/statsRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 const { CATEGORIES } = require('./utils/constants');
 
 // Fail fast and name the missing keys, so a bad .env file is easy to fix.
@@ -64,6 +66,9 @@ app.get('/api/categories', (req, res) => {
   res.status(200).json(CATEGORIES);
 });
 
+// Public counters for the landing page.
+app.use('/api', statsRoutes);
+
 // ----------------------------- ROUTES GO HERE -----------------------------
 // Authentication: POST /api/register, POST /api/login, GET /api/me
 app.use('/api', authRoutes);
@@ -78,8 +83,10 @@ app.use('/api', lessonRoutes);
 // Student enrollments and lesson progress: /api/enroll, /api/my-courses
 app.use('/api', enrollmentRoutes);
 
-// Later tasks mount their own route files here, for example:
-// app.use('/api/stats', require('./routes/statsRoutes'));
+// Admin area: every route inside checks for an admin token.
+app.use('/api/admin', adminRoutes);
+
+// Later tasks mount their own route files here.
 // --------------------------------------------------------------------------
 
 // Unknown URLs and thrown errors are handled last, in that order.
