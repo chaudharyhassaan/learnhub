@@ -1,3 +1,4 @@
+Read HANDOFF.md first for current project status and remaining work.
 # LearnHub project rules (read before every task)
 ## What this is
 LearnHub is a MERN stack Learning Management System. It is a WEBSITE (not a mobile app) for a
