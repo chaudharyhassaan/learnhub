@@ -1,0 +1,25 @@
+.lh-student-page { display: grid; gap: var(--lh-space-24); }
+.lh-student-page .page-title, .lh-lesson-select span { overflow-wrap: anywhere; }
+.lh-student-heading, .lh-student-filters { display: flex; align-items: center; flex-wrap: wrap; gap: var(--lh-space-8); }
+.lh-student-heading { justify-content: space-between; margin-bottom: var(--lh-space-8); }
+.lh-student-filters [aria-pressed="true"] { background: var(--lh-sand-tint); font-weight: var(--lh-semibold); }
+.lh-enrolled-card { flex: 1; padding: var(--lh-space-8); }
+.lh-enrolled-card h3 { overflow-wrap: anywhere; }
+.lh-enrolled-card .btn { margin-top: var(--lh-space-16); }
+.lh-back-courses { justify-self: start; }
+.lh-lesson-list { list-style: none; padding: 0; }
+.lh-lesson-list li + li { border-top: var(--lh-border); }
+.lh-lesson-select {
+  display: flex; justify-content: space-between; align-items: center; gap: var(--lh-space-8);
+  width: 100%; min-height: var(--lh-target); padding: var(--lh-space-8);
+  background: transparent; color: var(--lh-espresso); border: 0; border-radius: var(--lh-radius); text-align: left;
+}
+.lh-lesson-select:hover { background: var(--lh-sand); }
+.lh-lesson-select[aria-current] { background: var(--lh-sand-tint); font-weight: var(--lh-semibold); }
+.lh-lesson-select small { display: block; font-size: var(--lh-caption); color: var(--lh-stone); }
+.lh-lesson-select svg { flex-shrink: 0; color: var(--lh-success); }
+.lh-lesson-viewer > * + * { margin-top: var(--lh-space-16); }
+.lh-lesson-media video, .lh-lesson-media iframe, .lh-lesson-media img { display: block; max-width: 100%; border-radius: var(--lh-radius); }
+.lh-lesson-media video, .lh-lesson-media iframe { width: 100%; }
+.lh-lesson-media img { max-height: 70vh; object-fit: contain; }
+.lh-lesson-media iframe { min-height: 70vh; border: var(--lh-border); }
