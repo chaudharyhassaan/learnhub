@@ -1,0 +1,18 @@
+.lh-instructor-page { display: grid; gap: var(--lh-space-24); }
+.lh-instructor-course { flex: 1; padding: var(--lh-space-8); }
+.lh-instructor-course h3, .lh-instructor-lesson-list strong { overflow-wrap: anywhere; }
+.lh-instructor-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--lh-space-8); }
+.lh-instructor-form { max-width: 65ch; }
+.lh-instructor-form > .lh-instructor-actions, .lh-instructor-form > .lh-progress,
+.lh-instructor-form > .lh-error, .lh-instructor-form > .lh-field + div:not(.lh-field) { margin-top: var(--lh-space-16); }
+.lh-instructor-actions .lh-delete-course { color: var(--lh-danger); }
+.lh-instructor-actions .lh-delete-course:hover, .lh-instructor-actions .lh-delete-course:active { color: var(--lh-danger-hover); }
+.lh-instructor-lessons { border-top: var(--lh-border); padding-top: var(--lh-space-24); }
+.lh-instructor-lessons .lh-instructor-form { margin-top: var(--lh-space-24); }
+.lh-instructor-lesson-list { list-style: none; padding: 0; }
+.lh-instructor-lesson-list li {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--lh-space-12);
+  padding-block: var(--lh-space-8); border-bottom: var(--lh-border);
+}
+.lh-instructor-lesson-list li > div { min-width: 0; }
+.lh-instructor-lesson-list small { font-size: var(--lh-caption); }

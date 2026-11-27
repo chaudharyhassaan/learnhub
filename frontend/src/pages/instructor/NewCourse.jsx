@@ -1,3 +1,7 @@
+import PageHeader from '../../components/common/PageHeader'
+import CourseForm from './CourseForm'
+import '../../styles/instructor.css'
+
 export default function NewCourse() {
-  return <h1 className="page-title">New course</h1>
+  return <div className="lh-instructor-page"><PageHeader title="Create course" /><CourseForm /></div>
 }
