@@ -95,7 +95,8 @@ Current `package.json` dependencies are only React 19, ReactDOM 19, Vite 8, the 
 
 ### GitHub remote
 
-**None set.** `git remote -v` is empty. The owner must create the repo and add the remote.
+`origin` is set to `https://github.com/chaudharyhassaan/learnhub.git`. Branch `main` tracks
+`origin/main` and has been pushed.
 
 ## 4. Backend reference
 
