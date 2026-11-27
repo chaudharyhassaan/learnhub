@@ -1,0 +1,35 @@
+.lh-auth-card {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 960px;
+  margin-inline: auto;
+}
+.lh-auth-form, .lh-auth-panel { padding: var(--lh-space-32); }
+.lh-auth-form .page-title { margin-block: var(--lh-space-16) var(--lh-space-24); }
+.lh-auth-panel {
+  align-content: center;
+  background: var(--lh-espresso);
+  color: var(--lh-sand);
+  border-radius: 0 var(--lh-card-radius) var(--lh-card-radius) 0;
+}
+.lh-auth-panel h2 { color: var(--lh-sand); }
+.lh-auth-panel .btn {
+  --bs-btn-color: var(--lh-sand);
+  --bs-btn-border-color: var(--lh-sand);
+}
+.lh-auth-panel .btn:focus-visible { outline-color: var(--lh-sand) !important; }
+.lh-auth-register .lh-auth-panel {
+  grid-column: 1;
+  grid-row: 1;
+  border-radius: var(--lh-card-radius) 0 0 var(--lh-card-radius);
+}
+.lh-auth-roles, .lh-auth-submit, .lh-auth-message { margin-top: var(--lh-space-16); }
+.lh-auth-roles legend { font-size: var(--lh-text); font-weight: var(--lh-semibold); margin-bottom: var(--lh-space-4); }
+.lh-auth-roles label { display: flex; gap: var(--lh-space-8); align-items: center; min-height: var(--lh-target); cursor: pointer; }
+.lh-auth-roles input { accent-color: var(--lh-walnut); }
+.lh-auth-form .lh-error a { text-decoration: underline; }
+@media (max-width: 767.98px) {
+  .lh-auth-card { grid-template-columns: minmax(0, 1fr); }
+  .lh-auth-form, .lh-auth-panel { padding: var(--lh-space-24); }
+  .lh-auth-card .lh-auth-panel { grid-row: 1; border-radius: var(--lh-card-radius) var(--lh-card-radius) 0 0; }
+}

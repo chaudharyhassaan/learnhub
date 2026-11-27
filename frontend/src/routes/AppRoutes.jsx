@@ -25,10 +25,10 @@ import AdminCourses from '../pages/admin/AdminCourses'
 // A direct visit goes to the dashboard. Only resume destinations inside this website.
 function GuestRoute() {
   const { user } = useAuth()
-  const { state, search } = useLocation()
+  const { pathname, state, search } = useLocation()
   if (!user) return <Outlet />
   const next = state?.from || new URLSearchParams(search).get('next')
-  if (typeof next === 'string' && /^\/(dashboard|learn|courses)([/?#]|$)/.test(next)) {
+  if (pathname === '/login' && typeof next === 'string' && /^\/(dashboard|learn|courses)([/?#]|$)/.test(next)) {
     return <Navigate to={next} replace />
   }
   return <Navigate to="/dashboard" replace />
