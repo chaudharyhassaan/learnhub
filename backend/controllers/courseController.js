@@ -18,25 +18,30 @@ function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-// Why: one aggregate returns the lesson counts for every course on the page,
-// which avoids running one query per course card.
-async function attachLessonCounts(courses) {
+// Count lessons and enrollments in batches so each row needs no extra requests.
+async function attachCourseCounts(courses) {
   if (courses.length === 0) {
     return courses;
   }
 
   const courseIds = courses.map((course) => course._id);
 
-  const rows = await Lesson.aggregate([
+  const pipeline = [
     { $match: { course: { $in: courseIds } } },
     { $group: { _id: '$course', count: { $sum: 1 } } },
+  ];
+  const [lessonRows, enrollmentRows] = await Promise.all([
+    Lesson.aggregate(pipeline),
+    Enrollment.aggregate(pipeline),
   ]);
 
-  const counts = new Map(rows.map((row) => [String(row._id), row.count]));
+  const lessonCounts = new Map(lessonRows.map((row) => [String(row._id), row.count]));
+  const enrollmentCounts = new Map(enrollmentRows.map((row) => [String(row._id), row.count]));
 
   return courses.map((course) => ({
     ...course,
-    lessonCount: counts.get(String(course._id)) || 0,
+    lessonCount: lessonCounts.get(String(course._id)) || 0,
+    enrolledCount: enrollmentCounts.get(String(course._id)) || 0,
   }));
 }
 
@@ -67,7 +72,7 @@ const listCourses = asyncHandler(async (req, res) => {
     Course.countDocuments(filter),
   ]);
 
-  const coursesWithCounts = await attachLessonCounts(courses);
+  const coursesWithCounts = await attachCourseCounts(courses);
 
   return res.status(200).json({
     courses: coursesWithCounts,

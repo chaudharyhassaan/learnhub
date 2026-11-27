@@ -1,0 +1,26 @@
+.lh-admin-page { display: grid; gap: var(--lh-space-24); min-width: 0; }
+.lh-admin-page section h2 { margin-bottom: var(--lh-space-16); }
+.lh-admin-summary { font-size: var(--lh-caption); margin-bottom: 0; }
+.lh-admin-bars { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--lh-space-12); }
+.lh-admin-bars li {
+  display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) minmax(2ch, auto);
+  align-items: center; gap: var(--lh-space-12); overflow-wrap: anywhere;
+}
+.lh-admin-track { height: var(--lh-space-8); background: var(--lh-sand); border-radius: var(--lh-radius); overflow: hidden; }
+.lh-admin-track > div { height: 100%; background: var(--lh-walnut); }
+.lh-admin-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--lh-space-4); max-width: 560px; }
+.lh-admin-day { display: grid; justify-items: center; gap: var(--lh-space-4); font-size: var(--lh-caption); }
+.lh-admin-column { display: flex; align-items: end; justify-content: center; width: 100%; height: var(--lh-space-96); margin-top: var(--lh-space-24); border-bottom: var(--lh-border); }
+.lh-admin-column-fill { position: relative; width: min(65%, 32px); background: color-mix(in srgb, var(--lh-walnut) 75%, var(--lh-sand)); border-radius: var(--lh-space-4) var(--lh-space-4) 0 0; }
+.lh-admin-column-fill span { position: absolute; left: 50%; bottom: 100%; transform: translateX(-50%); }
+.lh-admin-table { max-width: 100%; border: var(--lh-border); border-radius: var(--lh-radius); }
+.lh-admin-table tr { height: var(--lh-space-48); }
+.lh-admin-table th, .lh-admin-table td { padding: var(--lh-space-8) var(--lh-space-12); }
+.lh-admin-table tbody tr:last-child td { border-bottom: 0; }
+.lh-admin-table time { white-space: nowrap; }
+.lh-admin-role { min-width: 132px; }
+.lh-admin-actions, .lh-admin-pagination { display: flex; align-items: center; gap: var(--lh-space-8); }
+.lh-admin-pagination { flex-wrap: wrap; }
+.lh-admin-delete { color: var(--lh-danger); }
+.lh-admin-delete:hover, .lh-admin-delete:active { color: var(--lh-danger-hover); }
+.lh-workspace, .lh-dashboard-main { min-width: 0; }
