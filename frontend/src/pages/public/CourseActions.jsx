@@ -10,15 +10,15 @@ import getErrorMessage from '../../utils/getErrorMessage'
 import useHomeData from './useHomeData'
 
 // Only students request enrollment data, and ownership controls the manage link.
-export default function CourseActions({ course }) {
+export default function CourseActions({ course, onEnrolled }) {
   const { user } = useAuth()
   const { pathname, search, hash } = useLocation()
   let action
   if (!user) {
     action = <Link className="btn btn-primary" to="/login" state={{ from: pathname + search + hash }}>Log in to enroll</Link>
   } else if (user.role === 'student') {
-    action = <StudentAction key={user.id || user._id} courseId={course._id} />
-  } else if (user.role === 'admin' || String(course.instructor?._id) === String(user.id || user._id)) {
+    action = <StudentAction key={user.id || user._id} courseId={course._id} onEnrolled={onEnrolled} />
+  } else if (user.role === 'admin' || (user.role === 'instructor' && course.instructor?._id === user.id)) {
     action = <Link className="btn btn-primary" to={`/dashboard/instructor/courses/${course._id}/edit`}>Manage course</Link>
   } else {
     action = <p className="mb-0">Instructor accounts cannot enroll.</p>
@@ -33,7 +33,7 @@ export default function CourseActions({ course }) {
 }
 
 // Wait for the account's courses before offering enrollment.
-function StudentAction({ courseId }) {
+function StudentAction({ courseId, onEnrolled }) {
   const courses = useHomeData(getMyCourses)
   const toast = useToast()
   const [enrolled, setEnrolled] = useState(false)
@@ -44,6 +44,7 @@ function StudentAction({ courseId }) {
     try {
       await enroll(courseId)
       setEnrolled(true)
+      onEnrolled()
       toast.success('You are enrolled')
     } catch (error) {
       toast.error(getErrorMessage(error).message)

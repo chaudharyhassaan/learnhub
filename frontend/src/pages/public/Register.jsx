@@ -1,3 +1,4 @@
+import usePageTitle from '../../utils/usePageTitle'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import AuthCard from '../../components/common/AuthCard'
@@ -23,6 +24,7 @@ function validateField(name, value) {
 
 // Validate on blur for quick feedback and again before submitting to the API.
 export default function Register() {
+  usePageTitle('Sign up')
   const { register } = useAuth()
   const toast = useToast()
   const { formRef, errors, setErrors, showErrors } = useAuthForm(fields)

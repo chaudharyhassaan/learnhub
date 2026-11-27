@@ -1,3 +1,4 @@
+import usePageTitle from '../../utils/usePageTitle'
 import PageHeader from '../../components/common/PageHeader'
 import StatItem from '../../components/common/StatItem'
 import StatRow from '../../components/common/StatRow'
@@ -45,6 +46,7 @@ function DailyEnrollments({ days }) {
 
 // Audit activity can load and retry independently of the enrollment charts.
 export default function AdminDashboard() {
+  usePageTitle('Overview')
   const analytics = useHomeData(getAnalytics)
   const activity = useHomeData(getAuditLogs)
   const data = analytics.data
@@ -68,7 +70,7 @@ export default function AdminDashboard() {
       <section><h2>Top courses</h2>
         {data.topCourses.length ? <HorizontalBars rows={data.topCourses.slice(0, 5).map(course => ({
           label: course.title, count: course.enrollments,
-        }))} /> : <p>No course enrollments yet.</p>}
+        }))} /> : <p>No course enrollments yet. Check back after students enroll.</p>}
       </section>
       <section><h2>Enrollments in the last 7 days</h2>
         <DailyEnrollments days={data.enrollmentsLast7Days} />
@@ -77,7 +79,7 @@ export default function AdminDashboard() {
     <section><h2>Recent admin activity</h2>
       {activity.loading && <LoadingState variant="table" />}
       {activity.error && <ErrorState message={activity.error} onRetry={activity.retry} />}
-      {logs?.length === 0 && <p>No admin activity yet.</p>}
+      {logs?.length === 0 && <p>No admin activity yet. Changes to users and courses will appear here.</p>}
       {logs?.length > 0 && <AdminTable label="Recent admin activity" columns={['Who', 'What', 'When']}>
         {logs.map(log => <tr key={log._id}>
           <td>{log.actor.name}</td><td>{log.details || log.action.replaceAll('_', ' ')}</td>

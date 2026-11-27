@@ -6,7 +6,7 @@ export default function ConfirmModal({ show, title, message, onCancel, onConfirm
   const id = useId()
   return <Modal show={show} onHide={loading ? undefined : onCancel} centered
     backdrop={loading ? 'static' : true} keyboard={!loading} aria-labelledby={id} aria-describedby={id + '-message'}>
-    <Modal.Header><Modal.Title as="h2" id={id}>{title}</Modal.Title></Modal.Header>
+    <Modal.Header><Modal.Title as="h2" className="text-break" id={id}>{title}</Modal.Title></Modal.Header>
     <Modal.Body id={id + '-message'}>{message}</Modal.Body>
     <Modal.Footer>
       <button type="button" autoFocus disabled={loading} className="btn btn-outline-primary" onClick={onCancel}>Cancel</button>

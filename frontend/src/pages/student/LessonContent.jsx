@@ -7,7 +7,8 @@ import useHomeData from '../public/useHomeData'
 export default function LessonContent({ lesson }) {
   const load = useCallback(async () => {
     const access = await getLessonAccess(lesson._id)
-    if (!access.fileUrl) return access
+    if (access.lesson.type === 'link') return access
+    if (!access.fileUrl) throw new Error('Missing lesson file')
     const url = getFileUrl(access.fileUrl)
     if (lesson.type === 'pdf') {
       const response = await fetch(url, { method: 'HEAD', cache: 'no-store' })

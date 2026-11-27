@@ -1,3 +1,4 @@
+import usePageTitle from '../../utils/usePageTitle'
 import { Link, useNavigate } from 'react-router-dom'
 import Accordion from 'react-bootstrap/Accordion'
 import CourseCard from '../../components/common/CourseCard'
@@ -30,6 +31,7 @@ const questions = [
 
 // Load stats and featured courses independently so either section can be retried.
 export default function Home() {
+  usePageTitle('Home')
   const stats = useHomeData(getStats)
   const featured = useHomeData(loadFeatured)
   const { user } = useAuth()
@@ -93,7 +95,7 @@ export default function Home() {
       </section>
 
       <section className="section container-narrow">
-        <h2>How it works</h2>
+        <h2 className="lh-steps-title">How it works</h2>
         <ol className="row g-4 lh-home-steps" role="list">
           {steps.map(([title, description], index) => (
             <li key={title} className="col-md-4">

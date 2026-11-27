@@ -1,3 +1,4 @@
+import usePageTitle from '../../utils/usePageTitle'
 import { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ConfirmModal from '../../components/common/ConfirmModal'
@@ -14,6 +15,7 @@ import './admin.css'
 
 // Reload the page after deletion and step back if its last course was removed.
 export default function AdminCourses() {
+  usePageTitle('Courses')
   const [page, setPage] = useState(1)
   const load = useCallback(() => getCourses({ page, limit: 50 }), [page])
   const result = useHomeData(load)
@@ -27,7 +29,9 @@ export default function AdminCourses() {
     <PageHeader title="Courses" />
     {result.loading && <LoadingState variant="table" />}
     {result.error && <ErrorState message={result.error} onRetry={result.retry} />}
-    {data?.courses.length === 0 && <p>No courses yet.</p>}
+    {data?.courses.length === 0 && <div><p>No courses yet. Create a course to add it to the catalogue.</p>
+      <Link className="btn btn-outline-primary" to="/dashboard/instructor/courses/new">Create course</Link>
+    </div>}
     {data?.courses.length > 0 && <AdminTable label="Courses"
       columns={['Title', 'Instructor', 'Category', 'Price', 'Students', 'Actions']}>
       {data.courses.map(course => <tr key={course._id}>

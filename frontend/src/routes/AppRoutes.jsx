@@ -3,9 +3,6 @@ import { useAuth } from '../context/AuthContext'
 import ProtectedRoute from './ProtectedRoute'
 import DashboardLayout from '../components/layout/DashboardLayout'
 import PublicLayout from '../components/layout/PublicLayout'
-import DashboardPreview from '../pages/DashboardPreview'
-import ComponentPreview from '../pages/ComponentPreview'
-import InstructorCourses from '../pages/instructor/InstructorCourses'
 import Home from '../pages/public/Home'
 import Courses from '../pages/public/Courses'
 import CourseDetail from '../pages/public/CourseDetail'
@@ -51,10 +48,8 @@ export default function AppRoutes() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Route>
-        {import.meta.env.DEV && <Route path="/components" element={<ComponentPreview />} />}
         <Route path="*" element={<NotFound />} />
       </Route>
-      {import.meta.env.DEV && <Route path="/components/dashboard/:role" element={<DashboardPreview />} />}
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<DashboardRedirect />} />
@@ -65,7 +60,7 @@ export default function AppRoutes() {
           </Route>
           <Route element={<ProtectedRoute allowedRoles={['instructor', 'admin']} />}>
             <Route path="/dashboard/instructor" element={<InstructorDashboard />} />
-            <Route path="/dashboard/instructor/courses" element={<InstructorCourses />} />
+            <Route path="/dashboard/instructor/courses" element={<InstructorDashboard />} />
             <Route path="/dashboard/instructor/courses/new" element={<NewCourse />} />
             <Route path="/dashboard/instructor/courses/:id/edit" element={<EditCourse />} />
           </Route>

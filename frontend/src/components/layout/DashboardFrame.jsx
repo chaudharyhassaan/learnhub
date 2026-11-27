@@ -3,10 +3,11 @@ import Offcanvas from 'react-bootstrap/Offcanvas'
 import { List } from 'react-bootstrap-icons'
 import Sidebar from './Sidebar'
 
-// The live dashboard and development preview share the responsive navigation shell.
+// Bootstrap keeps keyboard focus inside the mobile navigation while it is open.
 export default function DashboardFrame({ user, title, onLogout, children }) {
   const [open, setOpen] = useState(false)
   return <div className="lh-dashboard">
+    <a className="lh-skip-link" href="#main-content">Skip to content</a>
     <Offcanvas responsive="lg" placement="start" show={open} onHide={() => setOpen(false)}
       className="lh-sidebar" id="dashboard-menu" aria-labelledby="drawer-title">
       <Offcanvas.Header closeButton><Offcanvas.Title id="drawer-title">Menu</Offcanvas.Title></Offcanvas.Header>
@@ -18,7 +19,7 @@ export default function DashboardFrame({ user, title, onLogout, children }) {
           aria-controls="dashboard-menu" aria-expanded={open} onClick={() => setOpen(true)}><List size={20} aria-hidden="true" /></button>
         <strong>{title}</strong><span>{user.name} · {user.role}</span>
       </header>
-      <main className="lh-dashboard-main">{children}</main>
+      <main id="main-content" tabIndex={-1} className="lh-dashboard-main">{children}</main>
     </div>
   </div>
 }

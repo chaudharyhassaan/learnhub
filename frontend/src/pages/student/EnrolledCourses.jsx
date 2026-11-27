@@ -13,7 +13,7 @@ export default function EnrolledCourses({ courses }) {
             <div className="card-body">
               <h3>{course.title}</h3>
               <ProgressBar value={progress} />
-              <Link className="btn btn-primary" to={`/learn/${course._id}`}
+              <Link className="btn btn-outline-primary" to={`/learn/${course._id}`}
                 aria-label={`Continue learning ${course.title}`}>Continue</Link>
             </div>
           </article>

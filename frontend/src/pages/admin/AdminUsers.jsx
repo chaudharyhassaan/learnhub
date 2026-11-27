@@ -1,9 +1,11 @@
+import usePageTitle from '../../utils/usePageTitle'
 import { useCallback, useEffect, useState } from 'react'
 import ConfirmModal from '../../components/common/ConfirmModal'
 import ErrorState from '../../components/common/ErrorState'
 import FormField from '../../components/common/FormField'
 import LoadingState from '../../components/common/LoadingState'
 import PageHeader from '../../components/common/PageHeader'
+import EmptyState from '../../components/common/EmptyState'
 import { useAuth } from '../../context/AuthContext'
 import { useToast } from '../../context/ToastContext'
 import { deleteUser, getUsers, updateUserRole } from '../../services/adminService'
@@ -19,6 +21,7 @@ const roles = ['admin', 'instructor', 'student']
 
 // A new search resets pagination, while mutations refresh the current results.
 export default function AdminUsers() {
+  usePageTitle('Users')
   const { user } = useAuth()
   const toast = useToast()
   const [input, setInput] = useState('')
@@ -58,9 +61,12 @@ export default function AdminUsers() {
   return <div className="lh-admin-page">
     <PageHeader title="Users" action={<FormField label="Search" type="search" value={input}
       onChange={event => setInput(event.target.value)} />} />
+    {changing && <p role="status">Updating role...</p>}
     {result.loading && <LoadingState variant="table" />}
     {result.error && <ErrorState message={result.error} onRetry={result.retry} />}
-    {data?.users.length === 0 && <p>No users match your search.</p>}
+    {data?.users.length === 0 && <EmptyState title="No users match your search."
+      message="Clear the search to view all accounts." actionLabel="Clear search"
+      onAction={() => { setInput(''); setQuery({ search: '', page: 1 }) }} />}
     {data?.users.length > 0 && <AdminTable label="Users" columns={['Name', 'Email', 'Role', 'Joined', 'Actions']}>
       {data.users.map(account => {
         const isSelf = account._id === user.id

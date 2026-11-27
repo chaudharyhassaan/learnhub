@@ -1,3 +1,4 @@
+import usePageTitle from '../../utils/usePageTitle'
 import { useState } from 'react'
 import AuthCard from '../../components/common/AuthCard'
 import FormField from '../../components/common/FormField'
@@ -8,6 +9,7 @@ import useAuthForm from './useAuthForm'
 
 // GuestRoute resumes the protected destination once login restores the user.
 export default function Login() {
+  usePageTitle('Log in')
   const { login } = useAuth()
   const { formRef, errors, setErrors, showErrors } = useAuthForm(['email', 'password'])
   const [message, setMessage] = useState('')

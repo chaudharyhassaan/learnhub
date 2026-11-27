@@ -3,7 +3,7 @@
 .lh-home > .section:first-child { padding-top: var(--lh-space-64); }
 .lh-home p { margin-bottom: var(--lh-space-24); }
 .lh-home p:last-child { margin-bottom: 0; }
-.lh-hero-copy { max-width: 55ch; }
+.lh-hero-copy { max-width: 55ch; text-wrap: balance; }
 .lh-hero-actions { display: flex; flex-wrap: wrap; gap: var(--lh-space-8); }
 .lh-hero-image {
   display: block;
@@ -30,6 +30,11 @@
   margin-bottom: var(--lh-space-8);
 }
 .lh-home-faq .accordion-button { min-height: var(--lh-target); }
+.lh-home-faq { border: var(--lh-border); border-radius: var(--lh-image-radius); overflow: hidden; }
+.lh-home-faq .accordion-button:focus-visible { outline-offset: -4px; }
+.lh-home-faq .accordion-button:hover { background-color: var(--lh-sand); }
+.lh-steps-title { margin: 0; }
+.lh-home .lh-home-steps { margin-top: 0; --bs-gutter-y: var(--lh-space-24); }
 .lh-home > .lh-home-cta {
   margin-top: var(--lh-space-32);
   padding-block: var(--lh-space-64);

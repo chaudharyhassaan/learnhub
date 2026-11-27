@@ -13,9 +13,10 @@ export default function PublicLayout() {
   const [expanded, setExpanded] = useState(false)
   const close = () => setExpanded(false)
   return <div className="lh-public">
+    <a className="lh-skip-link" href="#main-content">Skip to content</a>
     <header className="lh-nav-shell"><Navbar expand="lg" expanded={expanded} onToggle={setExpanded}
       className="container-narrow" aria-label="Main navigation">
-      <div onClick={close}><Wordmark /></div>
+      <Wordmark onClick={close} />
       <Navbar.Toggle aria-controls="public-menu" />
       <Navbar.Collapse id="public-menu">
         <NavLink className="lh-nav-link" to="/courses" onClick={close}>Courses</NavLink>
@@ -30,7 +31,7 @@ export default function PublicLayout() {
         </div>
       </Navbar.Collapse>
     </Navbar></header>
-    <main className={isHome ? 'lh-home-main' : 'container-narrow lh-public-main'}><Outlet /></main>
+    <main id="main-content" tabIndex={-1} className={isHome ? 'lh-home-main' : 'container-narrow lh-public-main'}><Outlet /></main>
     <footer className="lh-footer"><div className="container-narrow">
       <Wordmark />
       <nav aria-label="Footer"><Link to="/courses">Courses</Link><Link to="/login">Log in</Link><Link to="/register">Sign up</Link></nav>

@@ -1,3 +1,4 @@
+import usePageTitle from '../../utils/usePageTitle'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import EmptyState from '../../components/common/EmptyState'
@@ -18,6 +19,7 @@ const filters = [
 
 // The API returns all enrollments, so switching filters only changes the visible list.
 export default function MyCourses() {
+  usePageTitle('My courses')
   const [selected, setSelected] = useState(filters[0])
   const navigate = useNavigate()
   const result = useHomeData(getMyCourses)

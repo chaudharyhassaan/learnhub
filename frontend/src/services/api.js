@@ -14,7 +14,7 @@ api.interceptors.response.use((response) => response, (error) => {
   const { config, response } = error
   const isFormRequest = ['/login', '/register'].includes(config?.url)
   const token = localStorage.getItem(tokenKey)
-  const currentSession = !token || config?.headers?.Authorization === `Bearer ${token}`
+  const currentSession = token && config?.headers?.Authorization === `Bearer ${token}`
   if (response?.status === 401 && !isFormRequest && currentSession) {
     localStorage.removeItem(tokenKey)
     const { pathname, search, hash } = window.location

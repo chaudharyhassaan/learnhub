@@ -17,6 +17,7 @@
 .lh-lesson-select:hover { background: var(--lh-sand); }
 .lh-lesson-select[aria-current] { background: var(--lh-sand-tint); font-weight: var(--lh-semibold); }
 .lh-lesson-select small { display: block; font-size: var(--lh-caption); color: var(--lh-stone); }
+.lh-lesson-select:disabled { color: var(--lh-stone); cursor: progress; }
 .lh-lesson-select svg { flex-shrink: 0; color: var(--lh-success); }
 .lh-lesson-viewer > * + * { margin-top: var(--lh-space-16); }
 .lh-lesson-media video, .lh-lesson-media iframe, .lh-lesson-media img { display: block; max-width: 100%; border-radius: var(--lh-radius); }

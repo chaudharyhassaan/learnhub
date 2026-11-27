@@ -72,6 +72,9 @@ a:active, .btn-text:active { color: var(--lh-pressed); }
   --bs-btn-border-color: var(--lh-walnut);
 }
 .btn-text {
+  --bs-btn-color: var(--lh-walnut);
+  --bs-btn-hover-color: var(--lh-espresso);
+  --bs-btn-active-color: var(--lh-pressed);
   background: transparent;
   border: 0;
   --bs-btn-disabled-color: var(--lh-stone);
@@ -153,3 +156,13 @@ a:active, .btn-text:active { color: var(--lh-pressed); }
   outline: var(--lh-ring) !important;
   outline-offset: 2px;
 }
+
+.btn-text:hover, .btn-text:active { text-decoration: underline; }
+.form-control:disabled, .form-select:disabled { color: var(--lh-stone); opacity: 1; }
+main, .lh-page-header, .lh-page-header > *, .lh-field { min-width: 0; }
+h1, h2, h3, p, .lh-page-header, .toast-body, .lh-stat { overflow-wrap: anywhere; }
+.lh-skip-link {
+  position: fixed; z-index: 1100; top: var(--lh-space-8); left: var(--lh-space-8);
+  padding: var(--lh-space-12); background: var(--lh-surface); border-radius: var(--lh-radius);
+}
+.lh-skip-link:not(:focus) { transform: translateY(-160%); }

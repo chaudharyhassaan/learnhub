@@ -1,3 +1,4 @@
+import usePageTitle from '../../utils/usePageTitle'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import ConfirmModal from '../../components/common/ConfirmModal'
@@ -18,6 +19,7 @@ const createPath = '/dashboard/instructor/courses/new'
 
 // Remove a card only after the API confirms the cascade has completed.
 export default function InstructorDashboard() {
+  usePageTitle('Your courses')
   const result = useHomeData(getMyCourses)
   const [removed, setRemoved] = useState([])
   const [selected, setSelected] = useState(null)
@@ -76,7 +78,7 @@ export default function InstructorDashboard() {
         ) : <EmptyState title="You have not created a course yet." message="Create a course to start adding lessons."
           actionLabel="Create your first course" onAction={() => navigate(createPath)} />}
       </>}
-      <ConfirmModal show={Boolean(selected)} title={`Delete ${selected?.title}?`}
+      <ConfirmModal show={Boolean(selected)} title={selected ? `Delete ${selected.title}?` : 'Delete course?'}
         message="Its lessons and enrollments will be removed. This cannot be undone."
         loading={deleting} onCancel={() => setSelected(null)} onConfirm={confirmDelete} />
     </div>

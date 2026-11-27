@@ -1,3 +1,4 @@
+import usePageTitle from '../../utils/usePageTitle'
 import { useCallback, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { CheckLg } from 'react-bootstrap-icons'
@@ -16,6 +17,7 @@ const lessonTypes = { video: 'Video', pdf: 'PDF', image: 'Image', link: 'Link' }
 
 // Key the viewer by course so pending updates cannot overwrite another course.
 export default function LessonViewer() {
+  usePageTitle('Lesson viewer')
   const { courseId } = useParams()
   return <EnrolledLessonViewer key={courseId} courseId={courseId} />
 }
@@ -73,7 +75,7 @@ function CourseLessons({ courseId, initial }) {
             <ol className="lh-lesson-list">
               {courseData.lessons.map((item, index) => (
                 <li key={item._id}>
-                  <button type="button" className="lh-lesson-select" aria-current={item._id === selected ? 'true' : undefined}
+                  <button type="button" className="lh-lesson-select" disabled={saving} aria-current={item._id === selected ? 'true' : undefined}
                     onClick={() => { setError(''); setSelected(item._id) }}>
                     <span>{index + 1}. {item.title}<small>{lessonTypes[item.type] || item.type}</small></span>
                     {item.completed && <><CheckLg aria-hidden="true" /><span className="visually-hidden">Completed</span></>}
@@ -81,7 +83,7 @@ function CourseLessons({ courseId, initial }) {
                 </li>
               ))}
             </ol>
-          ) : <p>No lessons have been added yet.</p>}
+          ) : <p>No lessons have been added yet. Visit My courses to continue another course.</p>}
         </section>
         {lesson && <section className="col-lg-8 lh-lesson-viewer">
           <h2>{lesson.title}</h2>

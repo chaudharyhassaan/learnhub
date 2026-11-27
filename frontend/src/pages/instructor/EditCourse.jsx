@@ -1,3 +1,4 @@
+import usePageTitle from '../../utils/usePageTitle'
 import { useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import ErrorState from '../../components/common/ErrorState'
@@ -13,6 +14,7 @@ import '../../styles/instructor.css'
 
 // The public course fetch is readable by anyone, so check ownership before showing the editor.
 export default function EditCourse() {
+  usePageTitle('Edit course')
   const { id } = useParams()
   const { user } = useAuth()
   const load = useCallback(() => getCourse(id), [id])

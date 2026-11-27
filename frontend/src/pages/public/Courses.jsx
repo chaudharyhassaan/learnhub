@@ -1,3 +1,4 @@
+import usePageTitle from '../../utils/usePageTitle'
 import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import CourseCard from '../../components/common/CourseCard'
@@ -18,6 +19,7 @@ const sortOptions = [
 
 // The URL stores committed filters so navigation can restore them.
 export default function Courses() {
+  usePageTitle('Courses')
   const [params, setParams] = useSearchParams()
   const search = params.get('search') || ''
   const category = params.get('category') || ''
@@ -73,9 +75,10 @@ export default function Courses() {
             onChange={event => setDraft({ params, search: event.target.value })} />
         </div>
         <div className="col-12 col-sm-6 col-md-4">
-          <FormField label="Category" as="select" value={category}
+          <FormField label="Category" as="select" value={category} disabled={categories.loading || Boolean(categories.error)}
+            aria-busy={categories.loading}
             onChange={event => changeFilter('category', event.target.value)}>
-            <option value="">All</option>
+            <option value="">{categories.loading ? 'Loading categories...' : 'All'}</option>
             {category && !categories.data?.includes(category) && <option value={category}>{category}</option>}
             {categories.data?.map(name => <option key={name}>{name}</option>)}
           </FormField>

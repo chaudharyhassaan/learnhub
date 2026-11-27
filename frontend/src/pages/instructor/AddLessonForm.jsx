@@ -56,6 +56,7 @@ export default function AddLessonForm({ courseId, onAdded }) {
         if (total) setProgress(100 * loaded / total)
       })
       form.reset()
+      setSource('file')
       onAdded()
       toast.success('Lesson added.')
     } catch (error) {
