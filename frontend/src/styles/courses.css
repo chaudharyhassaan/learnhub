@@ -1,0 +1,19 @@
+.lh-catalogue { display: grid; gap: var(--lh-space-24); }
+.lh-catalogue .lh-course-card { flex: 1; }
+.lh-pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--lh-space-12); }
+.lh-course-overview .page-title { margin-top: var(--lh-space-24); overflow-wrap: anywhere; }
+.lh-course-overview h2 { margin-top: var(--lh-space-32); }
+.lh-course-description { white-space: pre-line; overflow-wrap: anywhere; margin-bottom: 0; }
+.lh-course-price {
+  font: var(--lh-semibold) var(--lh-h1)/var(--lh-heading-leading) var(--lh-heading);
+  color: var(--lh-espresso);
+  margin-bottom: var(--lh-space-16);
+}
+.lh-course-lessons li { padding-block: var(--lh-space-8); border-bottom: var(--lh-border); }
+.lh-course-lessons li span { font-size: var(--lh-caption); }
+@media (min-width: 992px) {
+  .lh-course-detail { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+  .lh-course-detail > * { width: 100%; }
+  .lh-course-actions { grid-column: 2; grid-row: 1 / 3; }
+  .lh-price-card { position: sticky; top: var(--lh-space-24); }
+}

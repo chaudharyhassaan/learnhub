@@ -67,6 +67,8 @@ export default function AppRoutes() {
             <Route path="/dashboard/instructor" element={<InstructorDashboard />} />
             <Route path="/dashboard/instructor/courses" element={<InstructorCourses />} />
             <Route path="/dashboard/instructor/courses/new" element={<NewCourse />} />
+          </Route>
+          <Route element={<ProtectedRoute allowedRoles={['instructor', 'admin']} />}>
             <Route path="/dashboard/instructor/courses/:id/edit" element={<EditCourse />} />
           </Route>
           <Route element={<ProtectedRoute allowedRoles={['admin']} />}>

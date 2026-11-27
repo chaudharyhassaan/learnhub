@@ -11,9 +11,11 @@ export default function useHomeData(load) {
   useEffect(() => {
     let active = true
     load().then(data => {
-      if (active) setResult({ loading: false, data, error: null })
+      if (active) setResult({ load, loading: false, data, error: null })
     }).catch(error => {
-      if (active) setResult({ loading: false, data: null, error: getErrorMessage(error).message })
+      if (active) setResult({
+        load, loading: false, data: null, error: getErrorMessage(error).message, status: error.response?.status,
+      })
     })
     return () => { active = false }
   }, [load, attempt])
@@ -23,5 +25,5 @@ export default function useHomeData(load) {
     setAttempt(current => current + 1)
   }
 
-  return { ...result, retry }
+  return { ...(result.load === load ? result : pending), retry }
 }
