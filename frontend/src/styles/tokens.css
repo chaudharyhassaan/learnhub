@@ -10,6 +10,8 @@
   --lh-line: rgba(58, 36, 24, 0.12);
   --lh-success: #2f6b3f;
   --lh-danger: #a63a2b;
+  --lh-danger-hover: #832e22;
+  --lh-sand-tint: color-mix(in srgb, var(--lh-sand) 35%, var(--lh-surface));
   --lh-pressed: #100b08;
   --lh-heading: 'Poppins', sans-serif;
   --lh-body: 'Manrope', sans-serif;
