@@ -1,0 +1,52 @@
+.lh-home-main { flex: 1; }
+.lh-home > .section { padding-block: var(--lh-space-32); }
+.lh-home > .section:first-child { padding-top: var(--lh-space-64); }
+.lh-home p { margin-bottom: var(--lh-space-24); }
+.lh-home p:last-child { margin-bottom: 0; }
+.lh-hero-copy { max-width: 55ch; }
+.lh-hero-actions { display: flex; flex-wrap: wrap; gap: var(--lh-space-8); }
+.lh-hero-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: var(--lh-card-radius);
+  box-shadow: var(--lh-shadow);
+}
+.lh-hero-fallback { display: grid; place-items: center; background: var(--lh-sand); }
+.lh-hero-fallback svg { width: 60%; }
+.lh-stats-caption {
+  font: var(--lh-regular) var(--lh-caption)/var(--lh-leading) var(--lh-body);
+  color: var(--lh-stone);
+  margin-bottom: var(--lh-space-16);
+}
+.lh-home .lh-stat-row { margin-bottom: 0; }
+.lh-see-courses, .lh-home-faq { margin-top: var(--lh-space-16); }
+.lh-home-steps { list-style: none; padding-left: 0; margin-bottom: 0; }
+.lh-home-steps span {
+  display: block;
+  color: var(--lh-walnut);
+  font: var(--lh-semibold) var(--lh-title)/var(--lh-heading-leading) var(--lh-heading);
+  margin-bottom: var(--lh-space-8);
+}
+.lh-home-faq .accordion-button { min-height: var(--lh-target); }
+.lh-home > .lh-home-cta {
+  margin-top: var(--lh-space-32);
+  padding-block: var(--lh-space-64);
+  background: var(--lh-espresso);
+}
+.lh-home-cta h2 { color: var(--lh-sand); margin-bottom: var(--lh-space-16); }
+.lh-home-cta .btn-primary {
+  --bs-btn-color: var(--lh-espresso);
+  --bs-btn-bg: var(--lh-bg);
+  --bs-btn-border-color: var(--lh-bg);
+  --bs-btn-hover-color: var(--lh-espresso);
+  --bs-btn-hover-bg: var(--lh-sand);
+  --bs-btn-hover-border-color: var(--lh-sand);
+}
+.lh-home-cta .btn:focus-visible { outline-color: var(--lh-sand) !important; }
+@media (min-width: 992px) {
+  .lh-home > .section { padding-block: var(--lh-space-48); }
+  .lh-home > .section:first-child { padding-top: var(--lh-space-96); }
+  .lh-home > .lh-home-cta { margin-top: var(--lh-space-48); padding-block: var(--lh-space-96); }
+}

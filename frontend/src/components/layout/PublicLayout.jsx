@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Navbar from 'react-bootstrap/Navbar'
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import Wordmark from './Wordmark'
 
@@ -9,6 +9,7 @@ const copyrightYear = new Date().getFullYear()
 // Public navigation follows the active session and closes after a mobile selection.
 export default function PublicLayout() {
   const { user, logout } = useAuth()
+  const isHome = useLocation().pathname === '/'
   const [expanded, setExpanded] = useState(false)
   const close = () => setExpanded(false)
   return <div className="lh-public">
@@ -29,7 +30,7 @@ export default function PublicLayout() {
         </div>
       </Navbar.Collapse>
     </Navbar></header>
-    <main className="container-narrow lh-public-main"><Outlet /></main>
+    <main className={isHome ? 'lh-home-main' : 'container-narrow lh-public-main'}><Outlet /></main>
     <footer className="lh-footer"><div className="container-narrow">
       <Wordmark />
       <nav aria-label="Footer"><Link to="/courses">Courses</Link><Link to="/login">Log in</Link><Link to="/register">Sign up</Link></nav>
