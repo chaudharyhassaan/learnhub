@@ -7,6 +7,7 @@ import DashboardFrame from './DashboardFrame'
 const titles = [
   ['/dashboard/admin', 'Overview'], ['/dashboard/admin/users', 'Users'], ['/dashboard/admin/courses', 'Courses'],
   ['/dashboard/student/courses', 'My courses'], ['/learn/:courseId', 'Lesson viewer'],
+  ['/dashboard/student/groups', 'My Groups'],
   ['/dashboard/instructor/courses', 'My courses'], ['/dashboard/instructor/courses/new', 'Create course'],
   ['/dashboard/instructor/courses/:id/edit', 'Edit course'],
   ['/dashboard/inbox', 'Inbox'], ['/dashboard/schedule', 'Schedule'],

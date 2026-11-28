@@ -20,7 +20,7 @@ export default function CourseCard({ course, dashboard = false }) {
       </div>
       <div className="lh-course-meta">
         <CourseRating average={course.ratingAverage} count={course.ratingCount} />
-        {dashboard && <span>{course.studentCount} students</span>}
+        {dashboard && <span>{course.studentCount} {course.studentCount === 1 ? 'student' : 'students'}</span>}
       </div>
       {dashboard && <div className="lh-course-meta">
         <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">

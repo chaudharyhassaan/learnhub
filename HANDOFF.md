@@ -289,3 +289,13 @@ With configuration already in the process environment, run these in backend/:
   or the matching seed administrator variables, in the shell).
 
 The --env-only option skips dotenv file loading. Stop both API instances once the suite finishes.
+
+The owner confirmed that seeding and the full smoke suite passed. The enhancement
+frontend now includes the role-based shell, instructor metrics and tools, student
+calendar and groups, and shared Inbox, Settings, and Help & Support pages. The
+student lesson viewer reports visible activity in 30-second intervals. Run the
+frontend build and lint from frontend/ with npm.cmd.
+
+The instructor and student dashboard captures are in docs/screenshots/. They use
+the demo accounts on the running local API. That API returned empty calendar and
+group results during capture.

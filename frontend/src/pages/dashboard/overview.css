@@ -16,6 +16,7 @@
 .lh-donut > div { position: absolute; inset: 0; display: grid; align-content: center; justify-items: center; gap: var(--lh-space-4); }
 .lh-overview-courses, .lh-group-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 184px), 1fr)); gap: var(--lh-space-12); }
 .lh-summary-course h3 { width: 100%; white-space: nowrap; display: block; text-overflow: ellipsis; }
+.lh-overview-courses .lh-thumb, .lh-overview-main .lh-enrolled-card .lh-thumb { max-height: 120px; }
 .lh-group-card { padding: var(--lh-space-16); }
 .lh-group-card h3 { font-size: var(--lh-subhead); }
 .lh-group-card p { margin-bottom: var(--lh-space-8); }

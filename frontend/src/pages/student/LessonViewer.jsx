@@ -43,10 +43,11 @@ function CourseLessons({ courseId, initial }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const lesson = courseData.lessons.find(item => item._id === selected)
+  const viewingLesson = Boolean(lesson)
 
   // Restart the interval when hidden time interrupts a full 30 seconds of viewing.
   useEffect(() => {
-    if (!selected) return
+    if (!viewingLesson) return
     let timer
     let pending = false
     function schedule() {
@@ -66,7 +67,7 @@ function CourseLessons({ courseId, initial }) {
       clearInterval(timer)
       document.removeEventListener('visibilitychange', schedule)
     }
-  }, [courseId, selected])
+  }, [courseId, viewingLesson])
 
   async function toggleCompletion() {
     if (saving) return

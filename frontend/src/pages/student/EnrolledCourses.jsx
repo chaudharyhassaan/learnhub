@@ -16,10 +16,12 @@ export default function EnrolledCourses({ courses }) {
               <p>{course.level || 'Basic'}</p>
               <CourseRating average={course.ratingAverage} count={course.ratingCount} />
               <ProgressBar value={progress} />
-              <Link className="btn btn-outline-primary" to={`/learn/${course._id}`}
-                aria-label={`Continue learning ${course.title}`}>Continue</Link>
-              <Link className="btn btn-primary" to={`/courses/${course._id}`}
-                aria-label={`View details for ${course.title}`}>View Details</Link>
+              <div className="lh-enrolled-actions">
+                <Link className="btn btn-outline-primary" to={`/learn/${course._id}`}
+                  aria-label={`Continue learning ${course.title}`}>Continue</Link>
+                <Link className="btn btn-primary" to={`/courses/${course._id}`}
+                  aria-label={`View details for ${course.title}`}>View Details</Link>
+              </div>
             </div>
           </article>
         </div>

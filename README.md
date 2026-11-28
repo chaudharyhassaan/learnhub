@@ -9,16 +9,20 @@ LearnHub is a MERN learning management system for browsing courses, publishing l
 ## Screenshots
 
 - [Add home page and course catalogue screenshots]
-- [Add student lesson viewer, instructor dashboard, and admin overview screenshots]
+- [Instructor dashboard](docs/screenshots/instructor-dashboard.png)
+- [Student dashboard](docs/screenshots/student-dashboard.png)
+- [Add student lesson viewer and admin overview screenshots]
 
 ## Features by role
 
 | Role | Features |
 | --- | --- |
 | Visitor | Browse, search, filter and sort the catalogue, view course details, and register as a student or instructor. |
-| Student | Enroll, open lessons, mark lessons complete, and track course progress. |
-| Instructor | Create and manage owned courses, publish file or link lessons, and see enrollment counts. |
+| Student | Enroll, open lessons, track progress, review courses, view events and groups, and follow learning paths. |
+| Instructor | Manage courses and lessons, review learning and enrollment metrics, schedule events, manage groups, evaluate students, and build ordered learning paths. |
 | Admin | Review analytics and audit activity, change user roles, remove accounts, and manage courses. |
+
+All signed-in roles can use Inbox, dashboard search, notifications, profile settings, and Help & Support. Voice search appears on browsers that support speech recognition. Earnings are estimates based on enrollment and course prices.
 
 ## Technologies used
 

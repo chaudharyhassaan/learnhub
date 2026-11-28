@@ -6,6 +6,7 @@
 .lh-enrolled-card { flex: 1; padding: var(--lh-space-8); }
 .lh-enrolled-card h3 { overflow-wrap: anywhere; }
 .lh-enrolled-card .btn { margin-top: var(--lh-space-16); }
+.lh-enrolled-actions { display: flex; flex-wrap: wrap; column-gap: var(--lh-space-8); }
 .lh-back-courses { justify-self: start; }
 .lh-lesson-list { list-style: none; padding: 0; }
 .lh-lesson-list li + li { border-top: var(--lh-border); }

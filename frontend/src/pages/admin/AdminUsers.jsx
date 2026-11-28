@@ -1,5 +1,6 @@
 import usePageTitle from '../../utils/usePageTitle'
 import { useCallback, useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import ConfirmModal from '../../components/common/ConfirmModal'
 import ErrorState from '../../components/common/ErrorState'
 import FormField from '../../components/common/FormField'
@@ -22,10 +23,16 @@ const roles = ['admin', 'instructor', 'student']
 // A new search resets pagination, while mutations refresh the current results.
 export default function AdminUsers() {
   usePageTitle('Users')
+  const [params] = useSearchParams()
+  const search = params.get('search') || ''
+  return <UsersTable key={search} initialSearch={search} />
+}
+
+function UsersTable({ initialSearch }) {
   const { user } = useAuth()
   const toast = useToast()
-  const [input, setInput] = useState('')
-  const [query, setQuery] = useState({ search: '', page: 1 })
+  const [input, setInput] = useState(initialSearch)
+  const [query, setQuery] = useState({ search: initialSearch, page: 1 })
   const [changing, setChanging] = useState(false)
   const load = useCallback(() => getUsers(query), [query])
   const result = useHomeData(load)
