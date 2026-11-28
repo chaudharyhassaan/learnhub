@@ -6,6 +6,7 @@ const { ROLES } = require('../utils/constants');
 // only have to look at the role field.
 const userSchema = new mongoose.Schema(
   {
+    headline: { type: String, trim: true, maxlength: 80, default: '' },
     name: {
       type: String,
       required: [true, 'Name is required'],

@@ -3,6 +3,12 @@ const Enrollment = require('../models/Enrollment');
 const Lesson = require('../models/Lesson');
 const User = require('../models/User');
 const AuditLog = require('../models/AuditLog');
+const Review = require('../models/Review');
+const Group = require('../models/Group');
+const Message = require('../models/Message');
+const Notification = require('../models/Notification');
+const Evaluation = require('../models/Evaluation');
+const LearningPath = require('../models/LearningPath');
 const asyncHandler = require('../utils/asyncHandler');
 const logAdminAction = require('../utils/audit');
 
@@ -90,20 +96,24 @@ const deleteUser = asyncHandler(async (req, res) => {
 
   // An instructor with courses must be handled first, otherwise those courses
   // would point at a user that no longer exists.
-  if (user.role === 'instructor') {
-    const courseCount = await Course.countDocuments({ instructor: user._id });
-
-    if (courseCount > 0) {
-      return res.status(400).json({
-        message: 'This instructor still has courses. Delete or reassign them first.',
-      });
-    }
+  if (await Course.exists({ instructor: user._id })) {
+    return res.status(400).json({
+      message: 'This instructor still has courses. Delete or reassign them first.',
+    });
   }
 
   const email = user.email;
 
   // Students lose their enrollment records with the account.
-  await Enrollment.deleteMany({ student: user._id });
+  await Promise.all([
+    Enrollment.deleteMany({ student: user._id }),
+    Review.deleteMany({ student: user._id }),
+    Evaluation.deleteMany({ student: user._id }),
+    Message.deleteMany({ $or: [{ sender: user._id }, { recipient: user._id }] }),
+    Notification.deleteMany({ user: user._id }),
+    LearningPath.deleteMany({ instructor: user._id }),
+    Group.updateMany({ members: user._id }, { $pull: { members: user._id } }),
+  ]);
   await user.deleteOne();
 
   await logAdminAction(req, 'delete_user', 'User', user._id, `Deleted user ${email}`);

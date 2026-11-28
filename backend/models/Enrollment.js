@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 
 const enrollmentSchema = new mongoose.Schema(
   {
+    totalSeconds: { type: Number, min: 0, default: 0 },
+    sessionCount: { type: Number, min: 0, default: 0 },
+    lastAccessedAt: Date,
     student: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -31,5 +34,6 @@ const enrollmentSchema = new mongoose.Schema(
 // Why: the database itself stops a student from enrolling in the same course twice,
 // even if two requests arrive at the same moment.
 enrollmentSchema.index({ student: 1, course: 1 }, { unique: true });
+enrollmentSchema.index({ course: 1 });
 
 module.exports = mongoose.model('Enrollment', enrollmentSchema);

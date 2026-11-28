@@ -3,6 +3,7 @@ const Lesson = require('../models/Lesson');
 const Enrollment = require('../models/Enrollment');
 const asyncHandler = require('../utils/asyncHandler');
 const recalculateProgress = require('../utils/progress');
+const notify = require('../utils/notify');
 
 // Why: the my-courses card needs the same small course shape in both endpoints.
 function shapeCourse(course, lessonCount) {
@@ -23,7 +24,7 @@ function shapeCourse(course, lessonCount) {
 const enroll = asyncHandler(async (req, res) => {
   const { courseId } = req.body;
 
-  const course = await Course.findById(courseId).select('_id');
+  const course = await Course.findById(courseId).select('title instructor');
 
   if (!course) {
     return res.status(404).json({ message: 'Course not found' });
@@ -52,6 +53,7 @@ const enroll = asyncHandler(async (req, res) => {
     throw error;
   }
 
+  await notify([course.instructor], 'enrollment', `New enrollment in ${course.title}`, `/courses/${course.id}`);
   return res.status(201).json({ enrollment });
 });
 

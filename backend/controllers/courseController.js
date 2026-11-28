@@ -4,6 +4,13 @@ const Enrollment = require('../models/Enrollment');
 const asyncHandler = require('../utils/asyncHandler');
 const logAdminAction = require('../utils/audit');
 const removeFile = require('../utils/files');
+const courseMetrics = require('../utils/courseMetrics');
+const Review = require('../models/Review');
+const Evaluation = require('../models/Evaluation');
+const Event = require('../models/Event');
+const Group = require('../models/Group');
+const LearningPath = require('../models/LearningPath');
+const { courseScope } = require('../utils/dashboardAccess');
 
 // Sort options are whitelisted here, so a query string can never choose an arbitrary field.
 const SORT_OPTIONS = {
@@ -16,33 +23,6 @@ const SORT_OPTIONS = {
 // they reach the database. Otherwise "c++" or "(" would break the query.
 function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-// Count lessons and enrollments in batches so each row needs no extra requests.
-async function attachCourseCounts(courses) {
-  if (courses.length === 0) {
-    return courses;
-  }
-
-  const courseIds = courses.map((course) => course._id);
-
-  const pipeline = [
-    { $match: { course: { $in: courseIds } } },
-    { $group: { _id: '$course', count: { $sum: 1 } } },
-  ];
-  const [lessonRows, enrollmentRows] = await Promise.all([
-    Lesson.aggregate(pipeline),
-    Enrollment.aggregate(pipeline),
-  ]);
-
-  const lessonCounts = new Map(lessonRows.map((row) => [String(row._id), row.count]));
-  const enrollmentCounts = new Map(enrollmentRows.map((row) => [String(row._id), row.count]));
-
-  return courses.map((course) => ({
-    ...course,
-    lessonCount: lessonCounts.get(String(course._id)) || 0,
-    enrolledCount: enrollmentCounts.get(String(course._id)) || 0,
-  }));
 }
 
 // GET /api/courses (public)
@@ -72,7 +52,7 @@ const listCourses = asyncHandler(async (req, res) => {
     Course.countDocuments(filter),
   ]);
 
-  const coursesWithCounts = await attachCourseCounts(courses);
+  const coursesWithCounts = await courseMetrics(courses);
 
   return res.status(200).json({
     courses: coursesWithCounts,
@@ -84,41 +64,12 @@ const listCourses = asyncHandler(async (req, res) => {
 
 // GET /api/courses/mine (instructor and admin)
 const listMyCourses = asyncHandler(async (req, res) => {
-  const courses = await Course.find({ instructor: req.user.id })
+  const courses = await Course.find(courseScope(req.user))
     .populate('instructor', 'name')
     .sort({ createdAt: -1 })
     .lean();
 
-  if (courses.length === 0) {
-    return res.status(200).json({ courses: [] });
-  }
-
-  const courseIds = courses.map((course) => course._id);
-
-  // Two grouped queries for the whole list instead of two queries per course.
-  const [lessonRows, enrollmentRows] = await Promise.all([
-    Lesson.aggregate([
-      { $match: { course: { $in: courseIds } } },
-      { $group: { _id: '$course', count: { $sum: 1 } } },
-    ]),
-    Enrollment.aggregate([
-      { $match: { course: { $in: courseIds } } },
-      { $group: { _id: '$course', count: { $sum: 1 } } },
-    ]),
-  ]);
-
-  const lessonCounts = new Map(lessonRows.map((row) => [String(row._id), row.count]));
-  const enrollmentCounts = new Map(
-    enrollmentRows.map((row) => [String(row._id), row.count])
-  );
-
-  const coursesWithCounts = courses.map((course) => ({
-    ...course,
-    lessonCount: lessonCounts.get(String(course._id)) || 0,
-    enrolledCount: enrollmentCounts.get(String(course._id)) || 0,
-  }));
-
-  return res.status(200).json({ courses: coursesWithCounts });
+  return res.status(200).json({ courses: await courseMetrics(courses) });
 });
 
 // GET /api/courses/:id (public)
@@ -131,14 +82,8 @@ const getCourse = asyncHandler(async (req, res) => {
     return res.status(404).json({ message: 'Course not found' });
   }
 
-  const [lessonCount, enrolledCount] = await Promise.all([
-    Lesson.countDocuments({ course: course._id }),
-    Enrollment.countDocuments({ course: course._id }),
-  ]);
-
-  return res.status(200).json({
-    course: { ...course, lessonCount, enrolledCount },
-  });
+  const [details] = await courseMetrics([course]);
+  return res.status(200).json({ course: details });
 });
 
 // POST /api/courses (instructor and admin)
@@ -155,6 +100,9 @@ const createCourse = asyncHandler(async (req, res) => {
         : Number(req.body.price),
     thumbnail: req.body.thumbnail ? String(req.body.thumbnail).trim() : '',
     instructor: req.user.id,
+    level: req.body.level,
+    durationHours: req.body.durationHours,
+    originalPrice: req.body.originalPrice,
   });
 
   // Populate before responding so the new course looks like the list items.
@@ -199,6 +147,9 @@ const updateCourse = asyncHandler(async (req, res) => {
     course.thumbnail = String(req.body.thumbnail).trim();
   }
 
+  for (const field of ['level', 'durationHours', 'originalPrice']) {
+    if (req.body[field] !== undefined) course[field] = req.body[field];
+  }
   await course.save();
   await course.populate('instructor', 'name');
 
@@ -228,6 +179,14 @@ const deleteCourse = asyncHandler(async (req, res) => {
 
   await Lesson.deleteMany({ course: course._id });
   await Enrollment.deleteMany({ course: course._id });
+  await Promise.all([
+    Review.deleteMany({ course: course._id }),
+    Evaluation.deleteMany({ course: course._id }),
+    Event.deleteMany({ course: course._id }),
+    Group.deleteMany({ course: course._id }),
+    LearningPath.deleteMany({ courses: course._id, 'courses.2': { $exists: false } }),
+  ]);
+  await LearningPath.updateMany({ courses: course._id }, { $pull: { courses: course._id } });
   await course.deleteOne();
 
   // Only an admin acting on someone else's course is an admin action worth logging.

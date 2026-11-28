@@ -6,6 +6,7 @@ const generateToken = require('../utils/generateToken');
 function publicUser(user) {
   return {
     id: user._id.toString(),
+    headline: user.headline || '',
     name: user.name,
     email: user.email,
     role: user.role,

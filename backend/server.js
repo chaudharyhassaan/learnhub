@@ -16,6 +16,7 @@ const lessonRoutes = require('./routes/lessonRoutes');
 const enrollmentRoutes = require('./routes/enrollmentRoutes');
 const statsRoutes = require('./routes/statsRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
 const { CATEGORIES } = require('./utils/constants');
 
 // Fail fast and name the missing keys, so a bad .env file is easy to fix.
@@ -85,6 +86,7 @@ app.use('/api', enrollmentRoutes);
 
 // Admin area: every route inside checks for an admin token.
 app.use('/api/admin', adminRoutes);
+app.use('/api', dashboardRoutes);
 
 // Later tasks mount their own route files here.
 // --------------------------------------------------------------------------

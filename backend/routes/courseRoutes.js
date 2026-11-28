@@ -15,6 +15,13 @@ const { validate, validateObjectId } = require('../middleware/validate');
 const { CATEGORIES } = require('../utils/constants');
 
 const router = express.Router();
+const courseMetadata = [
+  body('level').optional().isString().bail().isIn(['Basic', 'Intermediate', 'Advanced']),
+  body('durationHours').optional().custom(value => typeof value === 'number' && Number.isFinite(value) && value >= 0)
+    .withMessage('Enter a duration of 0 or more.'),
+  body('originalPrice').optional().custom(value => typeof value === 'number' && Number.isFinite(value) && value >= 0)
+    .withMessage('Enter an original price of 0 or more.'),
+];
 
 // Query rules for the public course list. Bad values are rejected instead of
 // silently ignored, so the frontend can show the problem.
@@ -125,6 +132,7 @@ router.post(
   protect,
   authorize('instructor', 'admin'),
   createRules,
+  courseMetadata,
   validate,
   createCourse
 );
@@ -135,6 +143,7 @@ router.put(
   authorize('instructor', 'admin'),
   validateObjectId('id'),
   updateRules,
+  courseMetadata,
   validate,
   updateCourse
 );

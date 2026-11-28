@@ -39,6 +39,9 @@ const courseSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    level: { type: String, enum: ['Basic', 'Intermediate', 'Advanced'], default: 'Basic' },
+    durationHours: { type: Number, min: 0, default: 0 },
+    originalPrice: { type: Number, min: 0, default: 0 },
   },
   { timestamps: true }
 );
