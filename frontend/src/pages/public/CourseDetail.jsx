@@ -8,8 +8,11 @@ import LoadingState from '../../components/common/LoadingState'
 import { getCourse } from '../../services/courseService'
 import { getLessons } from '../../services/lessonService'
 import CourseActions from './CourseActions'
+import CourseReviews from './CourseReviews'
+import CourseRating from '../../components/common/CourseRating'
 import useHomeData from './useHomeData'
 import '../../styles/courses.css'
+import '../dashboard/tools.css'
 
 const lessonTypes = { pdf: 'PDF', video: 'MP4', image: 'Image', link: 'Link' }
 
@@ -22,6 +25,7 @@ export default function CourseDetail() {
 
 function CourseContent({ id }) {
   const [justEnrolled, setJustEnrolled] = useState(false)
+  const [canReview, setCanReview] = useState(false)
   const navigate = useNavigate()
   const loadCourse = useCallback(() => getCourse(id), [id])
   const loadLessons = useCallback(() => getLessons(id), [id])
@@ -43,11 +47,12 @@ function CourseContent({ id }) {
         <p className="text-muted-lh">
           By {course.instructor?.name || 'Unknown instructor'} / {course.category} / {course.lessonCount} lessons / {course.enrolledCount + Number(justEnrolled)} students
         </p>
+        <CourseRating average={course.ratingAverage} count={course.ratingCount} />
         <h2>About this course</h2>
         <p className="lh-course-description">{course.description}</p>
       </div>
       <aside className="col-lg-4 lh-course-actions">
-        <CourseActions course={course} onEnrolled={() => setJustEnrolled(true)} />
+        <CourseActions course={course} onEnrolled={() => setJustEnrolled(true)} setCanReview={setCanReview} />
       </aside>
       <section className="col-lg-8 lh-course-lessons">
         <h2>Lessons</h2>
@@ -62,6 +67,10 @@ function CourseContent({ id }) {
           </ol>
         )}
       </section>
+      <CourseReviews course={course} canReview={canReview} refreshCourse={() => {
+        setJustEnrolled(false)
+        detail.retry()
+      }} />
     </div>
   )
 }

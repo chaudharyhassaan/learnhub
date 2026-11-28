@@ -35,6 +35,9 @@
 .lh-course-info { flex: 1; display: flex; flex-direction: column; align-items: start; gap: var(--lh-space-4); padding: var(--lh-space-16) var(--lh-space-8) var(--lh-space-8); }
 .lh-course-info h3 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
 .lh-course-info strong { margin-top: auto; padding-block: var(--lh-space-8); }
+.lh-course-meta, .lh-course-rating { display: flex; flex-wrap: wrap; align-items: center; gap: var(--lh-space-8); }
+.lh-course-rating svg { flex-shrink: 0; color: var(--lh-walnut); }
+.lh-level { padding: var(--lh-space-4); background: var(--lh-sand-tint); border-radius: var(--lh-radius); color: var(--lh-espresso); }
 .lh-page-header, .lh-footer > div, .lh-footer nav { display: flex; align-items: center; flex-wrap: wrap; gap: var(--lh-space-16); }
 .lh-page-header { justify-content: space-between; }
 .lh-page-header p { margin: 0; }

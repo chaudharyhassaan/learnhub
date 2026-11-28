@@ -62,7 +62,7 @@ export function AuthProvider({ children }) {
       {loading ? <LoadingState /> : <ErrorState message={error} onRetry={retry} />}
     </main>
   )
-  return <AuthContext.Provider value={{ user, loading, login, register, logout }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, setUser, loading, login, register, logout }}>{children}</AuthContext.Provider>
 }
 
 // oxlint-disable-next-line react/only-export-components

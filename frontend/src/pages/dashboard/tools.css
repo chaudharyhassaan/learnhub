@@ -1,0 +1,31 @@
+.lh-tool-page { display: grid; gap: var(--lh-space-24); }
+.lh-tool-form { max-width: 65ch; }
+.lh-tool-form > .btn, .lh-message-thread + form > .btn { margin-top: var(--lh-space-16); }
+.lh-tool-actions { display: flex; align-items: center; flex-wrap: wrap; gap: var(--lh-space-8); margin-top: var(--lh-space-16); }
+.lh-inbox-grid { display: grid; gap: var(--lh-space-24); }
+.lh-inbox-grid > * { min-width: 0; }
+.lh-inbox-contacts, .lh-message-thread { list-style: none; padding: 0; }
+.lh-inbox-contacts .btn { display: grid; text-align: left; justify-content: start; width: 100%; }
+.lh-inbox-contacts small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 28ch; }
+.lh-inbox-contacts [aria-pressed="true"], .lh-message-thread li { background: var(--lh-sand-tint); }
+.lh-message-thread { display: grid; gap: var(--lh-space-8); max-height: 448px; overflow: auto; }
+.lh-message-thread li { border-radius: var(--lh-radius); padding: var(--lh-space-12); width: fit-content; max-width: 90%; }
+.lh-message-thread li.lh-own-message { justify-self: end; background: var(--lh-sand); }
+.lh-message-thread p { margin: 0; white-space: pre-wrap; }
+.lh-message-thread small { color: var(--lh-stone); }
+.lh-tool-table { overflow-x: auto; }
+.lh-tool-table table { margin-bottom: 0; }
+.lh-tool-table th, .lh-tool-table td { padding: var(--lh-space-8); vertical-align: middle; }
+.lh-tool-table textarea { min-width: 192px; }
+.lh-tool-table input[type="number"] { min-width: 88px; }
+.lh-tool-tabs { display: flex; gap: var(--lh-space-8); }
+.lh-tool-tabs .active { background: var(--lh-sand); font-weight: var(--lh-semibold); }
+.lh-fit-button { justify-self: start; }
+.lh-path-card { padding: var(--lh-space-16); }
+.lh-path-slot { display: flex; flex-wrap: wrap; align-items: end; gap: var(--lh-space-8); margin-top: var(--lh-space-12); }
+.lh-path-slot .lh-field { flex: 1 1 192px; }
+.lh-tracking-bars { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--lh-space-8); }
+.lh-tracking-bars li { display: grid; grid-template-columns: minmax(7ch, 12ch) minmax(0, 1fr) 3ch; align-items: center; gap: var(--lh-space-8); }
+.lh-tracking-track { height: var(--lh-space-8); border-radius: var(--lh-radius); background: var(--lh-sand); overflow: hidden; }
+.lh-tracking-track span { display: block; height: 100%; background: var(--lh-walnut); }
+@media (min-width: 768px) { .lh-inbox-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); } }

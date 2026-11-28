@@ -1,0 +1,36 @@
+.lh-overview-grid { display: grid; gap: var(--lh-space-24); }
+.lh-overview-main { min-width: 0; display: grid; gap: var(--lh-space-24); align-content: start; }
+.lh-metrics { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: var(--lh-space-12); }
+.lh-metric-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--lh-space-12); }
+.lh-metric, .lh-completion-summary { padding: var(--lh-space-16); }
+.lh-metric { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: var(--lh-space-8); background: var(--lh-sand-tint); }
+.lh-metric:nth-child(2) { background: color-mix(in srgb, var(--lh-caramel) 18%, var(--lh-surface)); }
+.lh-metric:nth-child(3) { background: color-mix(in srgb, var(--lh-walnut) 12%, var(--lh-surface)); }
+.lh-metric:nth-child(4) { background: color-mix(in srgb, var(--lh-espresso) 10%, var(--lh-surface)); }
+.lh-metric svg { flex-shrink: 0; color: var(--lh-walnut); }
+.lh-metric h2, .lh-completion-summary h2 { font-size: var(--lh-text); }
+.lh-metric strong, .lh-donut strong { color: var(--lh-espresso); font: var(--lh-semibold) var(--lh-h3)/1.25 var(--lh-heading); }
+.lh-metric small { display: block; margin-top: var(--lh-space-4); }
+.lh-donut { max-width: 160px; margin: auto; position: relative; width: 100%; }
+.lh-donut > svg { display: block; width: 100%; }
+.lh-donut > div { position: absolute; inset: 0; display: grid; align-content: center; justify-items: center; gap: var(--lh-space-4); }
+.lh-overview-courses, .lh-group-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 184px), 1fr)); gap: var(--lh-space-12); }
+.lh-summary-course h3 { width: 100%; white-space: nowrap; display: block; text-overflow: ellipsis; }
+.lh-group-card { padding: var(--lh-space-16); }
+.lh-group-card h3 { font-size: var(--lh-subhead); }
+.lh-group-card p { margin-bottom: var(--lh-space-8); }
+.lh-avatar-stack { display: flex; align-items: center; }
+.lh-avatar-stack .lh-avatar { width: 32px; height: 32px; flex-basis: 32px; border: 1px solid var(--lh-surface); font-size: var(--lh-caption); }
+.lh-avatar-stack .lh-avatar + .lh-avatar { margin-left: calc(-1 * var(--lh-space-8)); }
+.lh-group-arrow { border-radius: 50%; }
+@media (min-width: 1280px) {
+  .lh-overview-grid { grid-template-columns: minmax(0, 1fr) minmax(336px, 28%); align-items: start; }
+  .lh-overview-courses { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .lh-group-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .lh-group-card { padding: var(--lh-space-12); }
+  .lh-avatar-stack .lh-avatar { width: 24px; height: 24px; flex-basis: 24px; }
+}
+@media (max-width: 575.98px) {
+  .lh-metrics { grid-template-columns: minmax(0, 1fr); }
+  .lh-metric svg { width: 24px; }
+}

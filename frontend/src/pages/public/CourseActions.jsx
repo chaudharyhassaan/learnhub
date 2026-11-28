@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import ErrorState from '../../components/common/ErrorState'
 import LoadingState from '../../components/common/LoadingState'
@@ -10,14 +10,14 @@ import getErrorMessage from '../../utils/getErrorMessage'
 import useHomeData from './useHomeData'
 
 // Only students request enrollment data, and ownership controls the manage link.
-export default function CourseActions({ course, onEnrolled }) {
+export default function CourseActions({ course, onEnrolled, setCanReview }) {
   const { user } = useAuth()
   const { pathname, search, hash } = useLocation()
   let action
   if (!user) {
     action = <Link className="btn btn-primary" to="/login" state={{ from: pathname + search + hash }}>Log in to enroll</Link>
   } else if (user.role === 'student') {
-    action = <StudentAction key={user.id || user._id} courseId={course._id} onEnrolled={onEnrolled} />
+    action = <StudentAction key={user.id || user._id} courseId={course._id} onEnrolled={onEnrolled} setCanReview={setCanReview} />
   } else if (user.role === 'admin' || (user.role === 'instructor' && course.instructor?._id === user.id)) {
     action = <Link className="btn btn-primary" to={`/dashboard/instructor/courses/${course._id}/edit`}>Manage course</Link>
   } else {
@@ -33,11 +33,16 @@ export default function CourseActions({ course, onEnrolled }) {
 }
 
 // Wait for the account's courses before offering enrollment.
-function StudentAction({ courseId, onEnrolled }) {
+function StudentAction({ courseId, onEnrolled, setCanReview }) {
   const courses = useHomeData(getMyCourses)
   const toast = useToast()
   const [enrolled, setEnrolled] = useState(false)
   const [saving, setSaving] = useState(false)
+  const hasEnrollment = enrolled || Boolean(courses.data?.courses.some(item => item.course?._id === courseId))
+  useEffect(() => {
+    setCanReview(hasEnrollment)
+    return () => setCanReview(false)
+  }, [hasEnrollment, setCanReview])
 
   async function enrollNow() {
     setSaving(true)
@@ -54,7 +59,7 @@ function StudentAction({ courseId, onEnrolled }) {
     }
   }
 
-  if (enrolled || courses.data?.courses.some(item => item.course?._id === courseId)) {
+  if (hasEnrollment) {
     return <Link className="btn btn-primary" to={`/learn/${courseId}`}>Continue learning</Link>
   }
   if (courses.loading) return <LoadingState count={1} />

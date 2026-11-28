@@ -15,5 +15,6 @@
   .lh-course-detail { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
   .lh-course-detail > * { width: 100%; }
   .lh-course-actions { grid-column: 2; grid-row: 1 / 3; }
+  .lh-course-reviews { grid-column: 1; }
   .lh-price-card { position: sticky; top: var(--lh-space-24); }
 }

@@ -1,0 +1,26 @@
+.lh-events-panel { min-width: 0; padding: var(--lh-space-12); }
+.lh-section-heading, .lh-month-heading { display: flex; align-items: center; justify-content: space-between; gap: var(--lh-space-8); }
+.lh-section-heading h2, .lh-section-heading h3 { margin: 0; }
+.lh-month-heading { margin-block: var(--lh-space-8); }
+.lh-calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); margin-bottom: var(--lh-space-16); }
+.lh-calendar-grid span { text-align: center; color: var(--lh-stone); font-size: var(--lh-caption); }
+.lh-calendar-grid button { min-height: var(--lh-target); border: 1px solid transparent; background: var(--lh-surface); color: var(--lh-espresso); border-radius: var(--lh-radius); }
+.lh-calendar-grid .lh-calendar-event { color: var(--lh-danger); font-weight: var(--lh-semibold); }
+.lh-calendar-grid button[aria-current] { border-color: var(--lh-walnut); }
+.lh-calendar-grid button[aria-pressed="true"] { background: var(--lh-sand); }
+.lh-calendar-grid button:hover { background: var(--lh-sand-tint); }
+.lh-calendar-grid button:active { background: var(--lh-sand); }
+.lh-timeline { position: relative; margin-block: var(--lh-space-24); height: 480px; }
+.lh-hour { position: absolute; width: 100%; border-top: var(--lh-border); }
+.lh-hour span { padding-top: var(--lh-space-4); display: inline-block; color: var(--lh-stone); font-size: var(--lh-caption); }
+.lh-timeline-events { position: absolute; inset: 0 0 0 var(--lh-space-48); }
+.lh-timeline-event { position: absolute; padding: var(--lh-space-4); background: var(--lh-sand-tint); border-inline-start: 4px solid var(--lh-walnut); overflow: auto; }
+.lh-timeline-event strong, .lh-timeline-event small { display: block; overflow-wrap: anywhere; }
+.lh-timeline-event small { font-size: var(--lh-caption); }
+.lh-time-marker { position: absolute; width: 100%; border-top: 2px solid var(--lh-danger); pointer-events: none; }
+.lh-dashboard-list { padding: 0; margin: 0; list-style: none; }
+.lh-dashboard-list > li { display: flex; align-items: center; justify-content: space-between; gap: var(--lh-space-8); border-bottom: var(--lh-border); padding-block: var(--lh-space-8); }
+.lh-dashboard-list p { margin: var(--lh-space-4) 0 0; }
+@media (max-width: 420px) {
+  .lh-events-panel { padding-inline: 0; }
+}

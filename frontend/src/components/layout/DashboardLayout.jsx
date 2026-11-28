@@ -1,5 +1,7 @@
+import { Suspense } from 'react'
 import { matchPath, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import LoadingState from '../common/LoadingState'
 import DashboardFrame from './DashboardFrame'
 
 const titles = [
@@ -25,5 +27,7 @@ export default function DashboardLayout() {
     logout()
     window.location.replace('/')
   }
-  return <DashboardFrame user={user} title={title} subtitle={subtitle} onLogout={signOut}><Outlet /></DashboardFrame>
+  return <DashboardFrame user={user} title={title} subtitle={subtitle} onLogout={signOut}>
+    <Suspense fallback={<LoadingState />}><Outlet /></Suspense>
+  </DashboardFrame>
 }

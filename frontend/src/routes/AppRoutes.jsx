@@ -1,3 +1,4 @@
+import { lazy } from 'react'
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import ProtectedRoute from './ProtectedRoute'
@@ -9,16 +10,30 @@ import CourseDetail from '../pages/public/CourseDetail'
 import Login from '../pages/public/Login'
 import Register from '../pages/public/Register'
 import NotFound from '../pages/public/NotFound'
-import StudentDashboard from '../pages/student/StudentDashboard'
 import MyCourses from '../pages/student/MyCourses'
-import LessonViewer from '../pages/student/LessonViewer'
-import InstructorDashboard from '../pages/instructor/InstructorDashboard'
 import NewCourse from '../pages/instructor/NewCourse'
 import EditCourse from '../pages/instructor/EditCourse'
-import AdminDashboard from '../pages/admin/AdminDashboard'
 import AdminUsers from '../pages/admin/AdminUsers'
 import AdminCourses from '../pages/admin/AdminCourses'
 import DashboardPending from '../pages/DashboardPending'
+const StudentDashboard = lazy(() => import('../pages/student/StudentDashboard'))
+const LessonViewer = lazy(() => import('../pages/student/LessonViewer'))
+const InstructorDashboard = lazy(() => import('../pages/instructor/InstructorDashboard'))
+const AdminDashboard = lazy(() => import('../pages/admin/AdminDashboard'))
+const Inbox = lazy(() => import('../pages/dashboard/Inbox'))
+const Settings = lazy(() => import('../pages/dashboard/Settings'))
+const Help = lazy(() => import('../pages/dashboard/Help'))
+const Schedule = lazy(() => import('../pages/dashboard/Schedule'))
+const LearningPaths = lazy(() => import('../pages/dashboard/LearningPaths'))
+const InstructorCourses = lazy(() => import('../pages/instructor/InstructorCourses'))
+const EvaluateStudents = lazy(() => import('../pages/instructor/EvaluateStudents'))
+const Tracking = lazy(() => import('../pages/instructor/Tracking'))
+const Groups = lazy(() => import('../pages/instructor/Groups'))
+
+function InstructorFeature({ page, title }) {
+  const { user } = useAuth()
+  return user.role === 'instructor' ? page : <DashboardPending title={title} />
+}
 
 // A direct visit goes to the dashboard. Only resume destinations inside this website.
 function GuestRoute() {
@@ -54,12 +69,12 @@ export default function AppRoutes() {
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<DashboardRedirect />} />
-          <Route path="/dashboard/inbox" element={<DashboardPending title="Inbox" />} />
-          <Route path="/dashboard/settings" element={<DashboardPending title="Settings" />} />
-          <Route path="/dashboard/help" element={<DashboardPending title="Help & Support" />} />
+          <Route path="/dashboard/inbox" element={<InstructorFeature page={<Inbox />} title="Inbox" />} />
+          <Route path="/dashboard/settings" element={<InstructorFeature page={<Settings />} title="Settings" />} />
+          <Route path="/dashboard/help" element={<InstructorFeature page={<Help />} title="Help & Support" />} />
           <Route element={<ProtectedRoute allowedRoles={['instructor', 'student']} />}>
-            <Route path="/dashboard/schedule" element={<DashboardPending title="Schedule" />} />
-            <Route path="/dashboard/learning-paths" element={<DashboardPending title="Learning Path" />} />
+            <Route path="/dashboard/schedule" element={<InstructorFeature page={<Schedule />} title="Schedule" />} />
+            <Route path="/dashboard/learning-paths" element={<InstructorFeature page={<LearningPaths />} title="Learning Path" />} />
           </Route>
           <Route element={<ProtectedRoute allowedRoles={['student']} />}>
             <Route path="/dashboard/student" element={<StudentDashboard />} />
@@ -68,14 +83,14 @@ export default function AppRoutes() {
           </Route>
           <Route element={<ProtectedRoute allowedRoles={['instructor', 'admin']} />}>
             <Route path="/dashboard/instructor" element={<InstructorDashboard />} />
-            <Route path="/dashboard/instructor/courses" element={<InstructorDashboard />} />
+            <Route path="/dashboard/instructor/courses" element={<InstructorCourses />} />
             <Route path="/dashboard/instructor/courses/new" element={<NewCourse />} />
             <Route path="/dashboard/instructor/courses/:id/edit" element={<EditCourse />} />
           </Route>
           <Route element={<ProtectedRoute allowedRoles={['instructor']} />}>
-            <Route path="/dashboard/instructor/evaluate" element={<DashboardPending title="Evaluate Students" />} />
-            <Route path="/dashboard/instructor/tracking/:tab" element={<DashboardPending title="Tracking" />} />
-            <Route path="/dashboard/instructor/groups" element={<DashboardPending title="Groups" />} />
+            <Route path="/dashboard/instructor/evaluate" element={<EvaluateStudents />} />
+            <Route path="/dashboard/instructor/tracking/:tab" element={<Tracking />} />
+            <Route path="/dashboard/instructor/groups" element={<Groups />} />
           </Route>
           <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
             <Route path="/dashboard/admin" element={<AdminDashboard />} />

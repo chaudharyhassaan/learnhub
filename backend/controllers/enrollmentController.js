@@ -4,6 +4,7 @@ const Enrollment = require('../models/Enrollment');
 const asyncHandler = require('../utils/asyncHandler');
 const recalculateProgress = require('../utils/progress');
 const notify = require('../utils/notify');
+const courseMetrics = require('../utils/courseMetrics');
 
 // Why: the my-courses card needs the same small course shape in both endpoints.
 function shapeCourse(course, lessonCount) {
@@ -13,6 +14,11 @@ function shapeCourse(course, lessonCount) {
     category: course.category,
     price: course.price,
     thumbnail: course.thumbnail,
+    level: course.level || 'Basic',
+    durationHours: course.durationHours ?? 0,
+    originalPrice: course.originalPrice ?? 0,
+    ratingAverage: course.ratingAverage ?? 0,
+    ratingCount: course.ratingCount ?? 0,
     instructor: {
       name: course.instructor ? course.instructor.name : '',
     },
@@ -62,7 +68,7 @@ const getMyCourses = asyncHandler(async (req, res) => {
   const enrollments = await Enrollment.find({ student: req.user.id })
     .populate({
       path: 'course',
-      select: 'title category price thumbnail instructor',
+      select: 'title category price thumbnail instructor level durationHours originalPrice',
       populate: { path: 'instructor', select: 'name' },
     })
     .sort({ createdAt: -1 })
@@ -75,24 +81,13 @@ const getMyCourses = asyncHandler(async (req, res) => {
     return res.status(200).json({ courses: [] });
   }
 
-  const courseIds = validEnrollments.map((enrollment) => enrollment.course._id);
+  const enriched = await courseMetrics(validEnrollments.map(enrollment => enrollment.course));
 
-  // One aggregate for every course on the page, instead of one count per card.
-  const rows = await Lesson.aggregate([
-    { $match: { course: { $in: courseIds } } },
-    { $group: { _id: '$course', count: { $sum: 1 } } },
-  ]);
-
-  const lessonCounts = new Map(rows.map((row) => [String(row._id), row.count]));
-
-  const courses = validEnrollments.map((enrollment) => ({
+  const courses = validEnrollments.map((enrollment, index) => ({
     enrollmentId: enrollment._id,
     progress: enrollment.progress,
     completedCount: enrollment.completedLessons.length,
-    course: shapeCourse(
-      enrollment.course,
-      lessonCounts.get(String(enrollment.course._id)) || 0
-    ),
+    course: shapeCourse(enriched[index], enriched[index].lessonCount),
   }));
 
   return res.status(200).json({ courses });
@@ -106,7 +101,7 @@ const getMyCourse = asyncHandler(async (req, res) => {
   })
     .populate({
       path: 'course',
-      select: 'title category price thumbnail instructor',
+      select: 'title category price thumbnail instructor level durationHours originalPrice',
       populate: { path: 'instructor', select: 'name' },
     })
     .lean();

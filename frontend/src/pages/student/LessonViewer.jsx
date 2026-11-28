@@ -1,5 +1,5 @@
 import usePageTitle from '../../utils/usePageTitle'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { CheckLg } from 'react-bootstrap-icons'
 import EmptyState from '../../components/common/EmptyState'
@@ -8,6 +8,7 @@ import LoadingState from '../../components/common/LoadingState'
 import PageHeader from '../../components/common/PageHeader'
 import ProgressBar from '../../components/common/ProgressBar'
 import { getMyCourse, updateLessonProgress } from '../../services/enrollmentService'
+import { sendHeartbeat } from '../../services/dashboardService'
 import getErrorMessage from '../../utils/getErrorMessage'
 import useHomeData from '../public/useHomeData'
 import LessonContent from './LessonContent'
@@ -42,6 +43,30 @@ function CourseLessons({ courseId, initial }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const lesson = courseData.lessons.find(item => item._id === selected)
+
+  // Restart the interval when hidden time interrupts a full 30 seconds of viewing.
+  useEffect(() => {
+    if (!selected) return
+    let timer
+    let pending = false
+    function schedule() {
+      clearInterval(timer)
+      if (document.visibilityState !== 'visible') return
+      timer = setInterval(async () => {
+        if (pending || document.visibilityState !== 'visible') return
+        pending = true
+        try { await sendHeartbeat(courseId, 30) }
+        catch { /* A transient tracking failure must not interrupt the lesson. */ }
+        finally { pending = false }
+      }, 30000)
+    }
+    schedule()
+    document.addEventListener('visibilitychange', schedule)
+    return () => {
+      clearInterval(timer)
+      document.removeEventListener('visibilitychange', schedule)
+    }
+  }, [courseId, selected])
 
   async function toggleCompletion() {
     if (saving) return

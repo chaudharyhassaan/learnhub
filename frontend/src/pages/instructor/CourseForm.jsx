@@ -25,6 +25,9 @@ export default function CourseForm({ course }) {
       title: fields.get('title').trim(),
       category: fields.get('category'),
       price: Number(fields.get('price')),
+      originalPrice: Number(fields.get('originalPrice')),
+      durationHours: Number(fields.get('durationHours')),
+      level: fields.get('level'),
       thumbnail: fields.get('thumbnail').trim(),
       description: description.trim(),
     }
@@ -62,6 +65,13 @@ export default function CourseForm({ course }) {
       {categories.error && <ErrorState message={categories.error} onRetry={categories.retry} />}
       <FormField name="price" label="Price" type="number" min="0" step="any" defaultValue={course?.price ?? 0}
         hint="Enter 0 for a free course" error={errors.price} />
+      <FormField name="originalPrice" label="Original price" type="number" min="0" step="any"
+        defaultValue={course?.originalPrice ?? 0} hint="Enter 0 when there is no original price." error={errors.originalPrice} />
+      <FormField name="durationHours" label="Duration in hours" type="number" min="0" step="any"
+        defaultValue={course?.durationHours ?? 0} error={errors.durationHours} />
+      <FormField name="level" label="Level" as="select" defaultValue={course?.level || 'Basic'} error={errors.level}>
+        <option>Basic</option><option>Intermediate</option><option>Advanced</option>
+      </FormField>
       <FormField name="thumbnail" label="Thumbnail URL" type="url" defaultValue={course?.thumbnail}
         hint="Paste an image link or leave empty" error={errors.thumbnail} />
       <FormField name="description" label="Description" as="textarea" rows={6} required minLength={10} maxLength={2000}
@@ -72,7 +82,7 @@ export default function CourseForm({ course }) {
         <button type="submit" className="btn btn-primary" disabled={saving || !categories.data} aria-busy={saving}>
           {saving ? 'Saving...' : course ? 'Save changes' : 'Create course'}
         </button>
-        <Link className="btn btn-outline-primary" to="/dashboard/instructor">Cancel</Link>
+        <Link className="btn btn-outline-primary" to="/dashboard/instructor/courses">Cancel</Link>
       </div>
     </form>
   )
