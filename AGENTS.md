@@ -51,6 +51,9 @@ learnhub/
  AuditLog collection.
 - Run npm audit before finishing a phase.
 ## Design system (apply to EVERY screen)
+Dashboard enhancements allow pastel stat cards derived from the coffee palette, rating stars,
+initials avatars, and a filled "View Details" button on each course card. All other design
+rules still apply.
 Minimalist and calm. Fewer elements, more space. If an element does not help the user finish a
 task, remove it.
 Colour tokens (CSS variables in src/styles/tokens.css):

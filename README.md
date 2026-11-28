@@ -116,7 +116,7 @@ Protected requests use `Authorization: Bearer <token>`.
 | POST | `/api/login` | Public | Sign in and receive a JWT. |
 | GET | `/api/me` | Signed in | Read the current account. |
 | GET | `/api/courses` | Public | Search, filter, sort, and paginate courses. |
-| GET | `/api/courses/mine` | Instructor, admin | List courses owned by the current user. |
+| GET | `/api/courses/mine` | Instructor, admin | List owned courses for instructors or all courses for admins. |
 | GET | `/api/courses/:id` | Public | Read a course and its counts. |
 | POST | `/api/courses` | Instructor, admin | Create a course. |
 | PUT | `/api/courses/:id` | Course owner, admin | Update a course. |
@@ -135,6 +135,40 @@ Protected requests use `Authorization: Bearer <token>`.
 | DELETE | `/api/admin/users/:id` | Admin | Delete an eligible account. |
 | GET | `/api/admin/analytics` | Admin | Read platform analytics. |
 | GET | `/api/admin/audit-logs` | Admin | List recent administrative activity. |
+| GET | `/api/courses/:id/reviews` | Public | List recent course reviews. |
+| POST | `/api/courses/:id/reviews` | Enrolled student | Save a review. |
+| PATCH | `/api/my-courses/:courseId/heartbeat` | Enrolled student | Record active lesson time. |
+| GET | `/api/instructor/overview` | Instructor, admin | Read dashboard metrics and summaries. |
+| GET | `/api/instructor/tracking` | Instructor, admin | Read 30-day tracking by optional course. |
+| GET | `/api/instructor/students` | Instructor, admin | Read enrolled students and evaluations. |
+| GET | `/api/search` | Signed in | Search scoped courses, students, and groups. |
+| GET | `/api/events` | Signed in | Read accessible events between two ISO dates. |
+| POST | `/api/events` | Course owner, admin | Create a schedule event. |
+| PUT | `/api/events/:id` | Course owner, admin | Update a schedule event. |
+| DELETE | `/api/events/:id` | Course owner, admin | Remove a schedule event. |
+| GET | `/api/groups` | Instructor, admin | List manageable groups. |
+| GET | `/api/my-groups` | Student | List the student's groups. |
+| POST | `/api/groups` | Course owner, admin | Create a course group. |
+| PUT | `/api/groups/:id` | Course owner, admin | Update a group. |
+| DELETE | `/api/groups/:id` | Course owner, admin | Delete a group. |
+| POST | `/api/groups/:id/members` | Course owner, admin | Add an enrolled student. |
+| DELETE | `/api/groups/:id/members/:studentId` | Course owner, admin | Remove a group member. |
+| POST | `/api/messages` | Signed in, eligible contact | Send a message. |
+| GET | `/api/messages/contacts` | Signed in | List eligible contacts. |
+| GET | `/api/messages/conversations` | Signed in | List conversations and unread counts. |
+| GET | `/api/messages/with/:userId` | Signed in, eligible contact | Read a thread and mark incoming messages read. |
+| GET | `/api/notifications` | Signed in | List recent notifications and unread count. |
+| PATCH | `/api/notifications/read-all` | Signed in | Mark all notifications read. |
+| PATCH | `/api/notifications/:id/read` | Notification recipient | Mark one notification read. |
+| GET | `/api/evaluations` | Signed in | List accessible student evaluations. |
+| PUT | `/api/evaluations` | Course owner, admin | Save an enrolled student's evaluation. |
+| GET | `/api/learning-paths` | Signed in | List learning paths. |
+| GET | `/api/learning-paths/:id` | Signed in | Read a path and student progress. |
+| POST | `/api/learning-paths` | Instructor, admin | Create an ordered learning path. |
+| PUT | `/api/learning-paths/:id` | Path owner, admin | Update a learning path. |
+| DELETE | `/api/learning-paths/:id` | Path owner, admin | Delete a learning path. |
+| PUT | `/api/me` | Signed in | Update name and headline. |
+| PUT | `/api/me/password` | Signed in | Change password after verifying the current one. |
 
 ## Security
 

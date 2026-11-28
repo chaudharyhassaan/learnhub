@@ -267,3 +267,25 @@ with screenshots, complete README, demo accounts.
    Vercel.
 7. Keep the code simple, commented and explainable in a viva. No extra libraries.
 8. Do not start long-running servers yourself. Give the owner the command to run.
+
+## Dashboard enhancement status
+
+Phase 1 added 34 API routes for reviews, activity tracking, analytics, events, groups,
+messaging, notifications, evaluations, learning paths, search and profile settings.
+Phase 2 adds demo fixtures, Postman examples and dashboard smoke checks. The original
+frontend and deployment preparation already landed on main before this branch.
+
+Run the smoke suite against two fresh local backend instances with the same database
+and JWT secret, on ports 5000 and 5001. The separate request quotas keep production
+rate limiting intact. Override the URLs with SMOKE_BASE_URL and SMOKE_DASHBOARD_BASE_URL
+if needed. Use a dedicated demo database for seeding and smoke checks. Seed resets
+all demo collections. The demo event times follow Asia/Karachi.
+
+With configuration already in the process environment, run these in backend/:
+
+- Seed: npm.cmd run seed -- --env-only
+- Start each API instance: npm.cmd start -- --env-only (set PORT per terminal).
+- Smoke: npm.cmd run test:smoke -- --env-only (provide SMOKE_ADMIN_EMAIL and SMOKE_ADMIN_PASSWORD,
+  or the matching seed administrator variables, in the shell).
+
+The --env-only option skips dotenv file loading. Stop both API instances once the suite finishes.

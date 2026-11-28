@@ -1,11 +1,13 @@
 // Why: this script checks the real API over HTTP, the same way the frontend calls it.
 // It uses Node's built-in fetch, so no test framework or extra dependency is needed.
-require('dotenv').config({
+if (!process.argv.includes('--env-only')) require('dotenv').config({
   path: require('path').join(__dirname, '..', '.env'),
   quiet: true,
 });
 
 const BASE_URL = process.env.SMOKE_BASE_URL || 'http://localhost:5000/api';
+const DASHBOARD_BASE_URL = process.env.SMOKE_DASHBOARD_BASE_URL || 'http://localhost:5001/api';
+const dashboardSmoke = require('./dashboard-smoke');
 const ORIGIN = new URL(BASE_URL).origin;
 const ADMIN_EMAIL = process.env.SMOKE_ADMIN_EMAIL || process.env.SEED_ADMIN_EMAIL || '';
 const ADMIN_PASSWORD =
@@ -68,8 +70,8 @@ function assertNoStoredFileName(body, label) {
   assert(!/"originalName"\s*:/.test(text), `${label}: response contains originalName`);
 }
 
-async function api(method, path, options = {}) {
-  const url = path.startsWith('http') ? path : BASE_URL + path;
+async function api(method, path, options = {}, baseUrl = BASE_URL) {
+  const url = path.startsWith('http') ? path : baseUrl + path;
   const headers = { ...(options.headers || {}) };
   let body;
 
@@ -84,7 +86,7 @@ async function api(method, path, options = {}) {
     headers.Authorization = `Bearer ${options.token}`;
   }
 
-  const response = await fetch(url, { method, headers, body, redirect: 'manual' });
+  const response = await fetch(url, { method, headers, body, redirect: 'manual', signal: AbortSignal.timeout(10000) });
 
   if (options.binary) {
     const buffer = Buffer.from(await response.arrayBuffer());
@@ -103,6 +105,14 @@ async function api(method, path, options = {}) {
 }
 
 async function run() {
+  assert(ADMIN_EMAIL && ADMIN_PASSWORD, 'Provide the smoke admin credentials in the process environment.');
+  assert(new URL(BASE_URL).origin !== new URL(DASHBOARD_BASE_URL).origin,
+    'Use a second backend instance for the dashboard smoke checks.');
+  const dashboardHealth = await api('GET', '/health', {}, DASHBOARD_BASE_URL);
+  assertStatus(dashboardHealth, 200, 'dashboard smoke backend health');
+  const primaryHealth = await api('GET', '/health');
+  assertStatus(primaryHealth, 200, 'primary smoke backend health');
+
   const unique = `smoke.${RUN_ID}`;
   const studentEmail = `${unique}.student@learnhub.test`;
   const instructorEmail = `${unique}.instructor@learnhub.test`;
@@ -114,7 +124,7 @@ async function run() {
 
   // ------------------------------- PUBLIC ---------------------------------
   await test('GET /api/health', async () => {
-    const res = await api('GET', '/health');
+    const res = primaryHealth;
     assertStatus(res, 200, 'health');
     assert(res.body.status === 'ok', 'health: status is not ok');
     return 'status ok';
@@ -952,6 +962,11 @@ async function run() {
     return `${res.body.logs.length} entries`;
   });
 
+  await dashboardSmoke({
+    api: (method, path, options) => api(method, path, options, DASHBOARD_BASE_URL),
+    test, assert, assertStatus, context, runId: RUN_ID,
+  });
+
   await test('DELETE /api/admin/users/:id student', async () => {
     const res = await api('DELETE', `/admin/users/${requireContext('studentId')}`, {
       token: requireContext('adminToken'),
@@ -1071,7 +1086,7 @@ run()
   .catch((error) => {
     console.error('');
     console.error(`Could not run the smoke test: ${error.message}`);
-    console.error(`Is the API running at ${BASE_URL}? Start it with: npm run dev`);
+    console.error(`Smoke API URLs: ${BASE_URL} and ${DASHBOARD_BASE_URL}`);
     process.exitCode = 1;
   })
   .finally(async () => {

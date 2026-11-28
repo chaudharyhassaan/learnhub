@@ -1,5 +1,5 @@
 // Why: dotenv first, so the seed uses exactly the same .env as the server.
-require('dotenv').config();
+if (!process.argv.includes('--env-only')) require('dotenv').config();
 
 const mongoose = require('mongoose');
 
@@ -9,6 +9,7 @@ const Course = require('./models/Course');
 const Lesson = require('./models/Lesson');
 const Enrollment = require('./models/Enrollment');
 const AuditLog = require('./models/AuditLog');
+const { collections, seedDashboard } = require('./seedDashboard');
 
 // Seeding deletes everything, so production needs an explicit opt in.
 if (process.env.NODE_ENV === 'production' && !process.argv.includes('--force')) {
@@ -19,8 +20,8 @@ if (process.env.NODE_ENV === 'production' && !process.argv.includes('--force')) 
 const DEMO_PASSWORD = 'Password123';
 
 const instructorData = [
-  { name: 'Amina Khan', email: 'amina@learnhub.test' },
-  { name: 'Daniel Okafor', email: 'daniel@learnhub.test' },
+  { name: 'Amina Khan', email: 'amina@learnhub.test', headline: 'Design and web development instructor' },
+  { name: 'Daniel Okafor', email: 'daniel@learnhub.test', headline: 'Backend development instructor' },
 ];
 
 const studentData = [
@@ -217,12 +218,12 @@ const enrollmentData = [
 ];
 
 async function seed() {
-  const required = ['SEED_ADMIN_EMAIL', 'SEED_ADMIN_PASSWORD'];
+  const required = ['MONGO_URI', 'SEED_ADMIN_EMAIL', 'SEED_ADMIN_PASSWORD'];
   const missing = required.filter((name) => !process.env[name]);
 
   if (missing.length > 0) {
     console.error(`Missing required environment variable(s): ${missing.join(', ')}`);
-    console.error('Add them to backend/.env before running the seed.');
+    console.error('Set them in the process environment before running the seed with --env-only.');
     process.exit(1);
   }
 
@@ -235,6 +236,7 @@ async function seed() {
     Lesson.deleteMany({}),
     Enrollment.deleteMany({}),
     AuditLog.deleteMany({}),
+    ...collections.map(model => model.deleteMany({})),
   ]);
 
   const admin = await User.create({
@@ -260,6 +262,8 @@ async function seed() {
 
   const courses = [];
   const lessonsByCourse = [];
+  const now = new Date();
+  const levels = ['Basic', 'Advanced', 'Basic', 'Basic', 'Intermediate', 'Intermediate', 'Basic', 'Intermediate'];
 
   for (const data of courseData) {
     const course = await Course.create({
@@ -267,6 +271,9 @@ async function seed() {
       description: data.description,
       category: data.category,
       price: data.price,
+      level: levels[courses.length],
+      durationHours: 2 + courses.length / 2,
+      originalPrice: data.price ? data.price + 20 : 0,
       instructor: instructors[data.instructorIndex]._id,
     });
 
@@ -284,7 +291,7 @@ async function seed() {
     lessonsByCourse.push(lessons);
   }
 
-  const enrollmentDocs = enrollmentData.map((data) => {
+  const enrollmentDocs = enrollmentData.map((data, index) => {
     const courseLessons = lessonsByCourse[data.course];
 
     return {
@@ -294,10 +301,15 @@ async function seed() {
         .slice(0, data.completed)
         .map((lesson) => lesson._id),
       progress: Math.round((data.completed / courseLessons.length) * 100),
+      totalSeconds: data.completed ? 1800 + 600 * data.completed : 0,
+      sessionCount: data.completed ? Math.max(1, data.completed - 1) : 0,
+      lastAccessedAt: data.completed ? new Date(now.getTime() - index * 3600000) : undefined,
+      createdAt: new Date(now.getTime() - index * 86400000),
     };
   });
 
   await Enrollment.insertMany(enrollmentDocs);
+  await seedDashboard({ instructors, students, courses, enrollments: enrollmentDocs, now });
 
   console.log('');
   console.log('Demo accounts:');
@@ -306,7 +318,7 @@ async function seed() {
       role: 'admin',
       name: admin.name,
       email: admin.email,
-      password: process.env.SEED_ADMIN_PASSWORD,
+      password: '(configured privately)',
     },
     ...instructors.map((user) => ({
       role: user.role,

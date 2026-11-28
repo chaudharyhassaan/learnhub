@@ -1,5 +1,5 @@
 // Why: dotenv must run before any other file reads process.env.
-require('dotenv').config();
+if (!process.argv.includes('--env-only')) require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');

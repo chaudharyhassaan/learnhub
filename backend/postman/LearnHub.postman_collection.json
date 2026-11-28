@@ -93,6 +93,58 @@
     {
       "key": "enrollmentId",
       "value": ""
+    },
+    {
+      "key": "secondCourseId",
+      "value": ""
+    },
+    {
+      "key": "eventId",
+      "value": ""
+    },
+    {
+      "key": "groupId",
+      "value": ""
+    },
+    {
+      "key": "notificationId",
+      "value": ""
+    },
+    {
+      "key": "pathId",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "from",
+      "value": ""
+    },
+    {
+      "key": "to",
+      "value": ""
+    },
+    {
+      "key": "eventStartsAt",
+      "value": ""
+    },
+    {
+      "key": "eventEndsAt",
+      "value": ""
+    },
+    {
+      "key": "search",
+      "value": "Design"
+    },
+    {
+      "key": "currentPassword",
+      "value": ""
+    },
+    {
+      "key": "newPassword",
+      "value": ""
     }
   ],
   "item": [
@@ -2258,6 +2310,802 @@
               }
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "Dashboard features",
+      "description": "Run individually after signing in. Set the IDs from the matching API responses. For event queries use ISO dates no more than 62 days apart. Mutation examples change demo data.",
+      "item": [
+        {
+          "name": "GET /courses/:id/reviews",
+          "request": {
+            "method": "GET",
+            "description": "List recent course reviews (Public).",
+            "url": "{{baseUrl}}/courses/{{courseId}}/reviews",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /courses/:id/reviews",
+          "request": {
+            "method": "POST",
+            "description": "Save a review (Enrolled student).",
+            "url": "{{baseUrl}}/courses/{{courseId}}/reviews",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Useful examples.\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /my-courses/:courseId/heartbeat",
+          "request": {
+            "method": "PATCH",
+            "description": "Record active lesson time (Enrolled student).",
+            "url": "{{baseUrl}}/my-courses/{{courseId}}/heartbeat",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"seconds\": 30\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /instructor/overview",
+          "request": {
+            "method": "GET",
+            "description": "Read dashboard metrics and summaries (Instructor, admin).",
+            "url": "{{baseUrl}}/instructor/overview",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{instructorToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /instructor/tracking",
+          "request": {
+            "method": "GET",
+            "description": "Read 30-day tracking by optional course (Instructor, admin).",
+            "url": "{{baseUrl}}/instructor/tracking?courseId={{courseId}}",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{instructorToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /instructor/students",
+          "request": {
+            "method": "GET",
+            "description": "Read enrolled students and evaluations (Instructor, admin).",
+            "url": "{{baseUrl}}/instructor/students?courseId={{courseId}}",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{instructorToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /search",
+          "request": {
+            "method": "GET",
+            "description": "Search scoped courses, students, and groups (Signed in).",
+            "url": "{{baseUrl}}/search?q={{search}}",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /events",
+          "request": {
+            "method": "GET",
+            "description": "Read accessible events between two ISO dates (Signed in).",
+            "url": "{{baseUrl}}/events?from={{from}}&to={{to}}",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /events",
+          "request": {
+            "method": "POST",
+            "description": "Create a schedule event (Course owner, admin).",
+            "url": "{{baseUrl}}/events",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{instructorToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Design workshop\",\n  \"type\": \"lecture\",\n  \"courseId\": \"{{courseId}}\",\n  \"startsAt\": \"{{eventStartsAt}}\",\n  \"endsAt\": \"{{eventEndsAt}}\",\n  \"description\": \"Bring a course draft.\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /events/:id",
+          "request": {
+            "method": "PUT",
+            "description": "Update a schedule event (Course owner, admin).",
+            "url": "{{baseUrl}}/events/{{eventId}}",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{instructorToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Design workshop\",\n  \"type\": \"lecture\",\n  \"courseId\": \"{{courseId}}\",\n  \"startsAt\": \"{{eventStartsAt}}\",\n  \"endsAt\": \"{{eventEndsAt}}\",\n  \"description\": \"Bring a course draft.\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /events/:id",
+          "request": {
+            "method": "DELETE",
+            "description": "Remove a schedule event (Course owner, admin).",
+            "url": "{{baseUrl}}/events/{{eventId}}",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{instructorToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /groups",
+          "request": {
+            "method": "GET",
+            "description": "List manageable groups (Instructor, admin).",
+            "url": "{{baseUrl}}/groups",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{instructorToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /my-groups",
+          "request": {
+            "method": "GET",
+            "description": "List the student's groups (Student).",
+            "url": "{{baseUrl}}/my-groups",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /groups",
+          "request": {
+            "method": "POST",
+            "description": "Create a course group (Course owner, admin).",
+            "url": "{{baseUrl}}/groups",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{instructorToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Study group\",\n  \"courseId\": \"{{courseId}}\",\n  \"meetingLabel\": \"Today 11am-1pm\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /groups/:id",
+          "request": {
+            "method": "PUT",
+            "description": "Update a group (Course owner, admin).",
+            "url": "{{baseUrl}}/groups/{{groupId}}",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{instructorToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Study group updated\",\n  \"meetingLabel\": \"Friday 2pm-3pm\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /groups/:id",
+          "request": {
+            "method": "DELETE",
+            "description": "Delete a group (Course owner, admin).",
+            "url": "{{baseUrl}}/groups/{{groupId}}",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{instructorToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /groups/:id/members",
+          "request": {
+            "method": "POST",
+            "description": "Add an enrolled student (Course owner, admin).",
+            "url": "{{baseUrl}}/groups/{{groupId}}/members",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{instructorToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": \"{{studentId}}\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /groups/:id/members/:studentId",
+          "request": {
+            "method": "DELETE",
+            "description": "Remove a group member (Course owner, admin).",
+            "url": "{{baseUrl}}/groups/{{groupId}}/members/{{studentId}}",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{instructorToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /messages",
+          "request": {
+            "method": "POST",
+            "description": "Send a message (Signed in, eligible contact).",
+            "url": "{{baseUrl}}/messages",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"recipientId\": \"{{userId}}\",\n  \"body\": \"Can we review the exercise?\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /messages/contacts",
+          "request": {
+            "method": "GET",
+            "description": "List eligible contacts (Signed in).",
+            "url": "{{baseUrl}}/messages/contacts",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /messages/conversations",
+          "request": {
+            "method": "GET",
+            "description": "List conversations and unread counts (Signed in).",
+            "url": "{{baseUrl}}/messages/conversations",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /messages/with/:userId",
+          "request": {
+            "method": "GET",
+            "description": "Read a thread and mark incoming messages read (Signed in, eligible contact).",
+            "url": "{{baseUrl}}/messages/with/{{userId}}",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /notifications",
+          "request": {
+            "method": "GET",
+            "description": "List recent notifications and unread count (Signed in).",
+            "url": "{{baseUrl}}/notifications",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /notifications/read-all",
+          "request": {
+            "method": "PATCH",
+            "description": "Mark all notifications read (Signed in).",
+            "url": "{{baseUrl}}/notifications/read-all",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /notifications/:id/read",
+          "request": {
+            "method": "PATCH",
+            "description": "Mark one notification read (Notification recipient).",
+            "url": "{{baseUrl}}/notifications/{{notificationId}}/read",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /evaluations",
+          "request": {
+            "method": "GET",
+            "description": "List accessible student evaluations (Signed in).",
+            "url": "{{baseUrl}}/evaluations",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /evaluations",
+          "request": {
+            "method": "PUT",
+            "description": "Save an enrolled student's evaluation (Course owner, admin).",
+            "url": "{{baseUrl}}/evaluations",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{instructorToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseId\": \"{{courseId}}\",\n  \"studentId\": \"{{studentId}}\",\n  \"score\": 90,\n  \"feedback\": \"Good work.\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /learning-paths",
+          "request": {
+            "method": "GET",
+            "description": "List learning paths (Signed in).",
+            "url": "{{baseUrl}}/learning-paths",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /learning-paths/:id",
+          "request": {
+            "method": "GET",
+            "description": "Read a path and student progress (Signed in).",
+            "url": "{{baseUrl}}/learning-paths/{{pathId}}",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /learning-paths",
+          "request": {
+            "method": "POST",
+            "description": "Create an ordered learning path (Instructor, admin).",
+            "url": "{{baseUrl}}/learning-paths",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{instructorToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Develop a website\",\n  \"description\": \"Start with design.\",\n  \"courses\": [\n    \"{{courseId}}\",\n    \"{{secondCourseId}}\"\n  ]\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /learning-paths/:id",
+          "request": {
+            "method": "PUT",
+            "description": "Update a learning path (Path owner, admin).",
+            "url": "{{baseUrl}}/learning-paths/{{pathId}}",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{instructorToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Develop a website\",\n  \"description\": \"Start with design.\",\n  \"courses\": [\n    \"{{courseId}}\",\n    \"{{secondCourseId}}\"\n  ]\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /learning-paths/:id",
+          "request": {
+            "method": "DELETE",
+            "description": "Delete a learning path (Path owner, admin).",
+            "url": "{{baseUrl}}/learning-paths/{{pathId}}",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{instructorToken}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /me",
+          "request": {
+            "method": "PUT",
+            "description": "Update name and headline (Signed in).",
+            "url": "{{baseUrl}}/me",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Amina Khan\",\n  \"headline\": \"Course instructor\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /me/password",
+          "request": {
+            "method": "PUT",
+            "description": "Change password after verifying the current one (Signed in).",
+            "url": "{{baseUrl}}/me/password",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"{{currentPassword}}\",\n  \"newPassword\": \"{{newPassword}}\"\n}"
+            }
+          },
+          "response": []
         }
       ]
     }
