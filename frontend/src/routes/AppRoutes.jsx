@@ -18,6 +18,7 @@ import EditCourse from '../pages/instructor/EditCourse'
 import AdminDashboard from '../pages/admin/AdminDashboard'
 import AdminUsers from '../pages/admin/AdminUsers'
 import AdminCourses from '../pages/admin/AdminCourses'
+import DashboardPending from '../pages/DashboardPending'
 
 // A direct visit goes to the dashboard. Only resume destinations inside this website.
 function GuestRoute() {
@@ -53,6 +54,13 @@ export default function AppRoutes() {
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<DashboardRedirect />} />
+          <Route path="/dashboard/inbox" element={<DashboardPending title="Inbox" />} />
+          <Route path="/dashboard/settings" element={<DashboardPending title="Settings" />} />
+          <Route path="/dashboard/help" element={<DashboardPending title="Help & Support" />} />
+          <Route element={<ProtectedRoute allowedRoles={['instructor', 'student']} />}>
+            <Route path="/dashboard/schedule" element={<DashboardPending title="Schedule" />} />
+            <Route path="/dashboard/learning-paths" element={<DashboardPending title="Learning Path" />} />
+          </Route>
           <Route element={<ProtectedRoute allowedRoles={['student']} />}>
             <Route path="/dashboard/student" element={<StudentDashboard />} />
             <Route path="/dashboard/student/courses" element={<MyCourses />} />
@@ -63,6 +71,11 @@ export default function AppRoutes() {
             <Route path="/dashboard/instructor/courses" element={<InstructorDashboard />} />
             <Route path="/dashboard/instructor/courses/new" element={<NewCourse />} />
             <Route path="/dashboard/instructor/courses/:id/edit" element={<EditCourse />} />
+          </Route>
+          <Route element={<ProtectedRoute allowedRoles={['instructor']} />}>
+            <Route path="/dashboard/instructor/evaluate" element={<DashboardPending title="Evaluate Students" />} />
+            <Route path="/dashboard/instructor/tracking/:tab" element={<DashboardPending title="Tracking" />} />
+            <Route path="/dashboard/instructor/groups" element={<DashboardPending title="Groups" />} />
           </Route>
           <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
             <Route path="/dashboard/admin" element={<AdminDashboard />} />
